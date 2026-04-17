@@ -1547,119 +1547,47 @@ const DEMO=[
   {nombre:'Set de Brochas x12',categoria:'Maquillaje',sku:'MQ-004',imagen:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop',badge:'sale',descripcion:'Set de 12 brochas profesionales para maquillaje en pelo sintetico.'},
 ];
 
-// JSONP callback — called by script tag injection
-function _tszLoad(data) {
-  if (data && data.ok && Array.isArray(data.products) && data.products.length > 0) {
-    allProducts = data.products.map(function(p){
-      return {
-        nombre:      String(p.nombre      ||'').trim(),
-        categoria:   normalizeCat(String(p.categoria  ||'')),
-        sku:         String(p.sku         ||'').trim(),
-        imagen:      String(p.imagen      ||'').trim(),
-        badge:       normalizeBadge(String(p.badge    ||'')),
-        id:          String(p.id          ||'').trim(),
-        descripcion: String(p.descripcion ||'').trim()
-      };
-    });
-    setSyncLive(allProducts.length + ' productos');
-    console.log('[TSZ] JSONP cargados:', allProducts.length);
-  } else {
-    console.warn('[TSZ] JSONP: sin productos, usando demo');
-    allProducts = DEMO;
-    setSyncOff('Sin conexion — modo demo');
-  }
-  renderProducts(allProducts);
-  updateCatImages(allProducts);
-  updateCatCounts(allProducts);
-  const hc = document.getElementById('heroStatCount');
-  if (hc && allProducts.length > 0) hc.textContent = allProducts.length + '+';
-}
-
-function loadProducts(){
+function loadProducts() {
   showSkel();
+  var CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv";
 
-  // Method 1: JSONP via script tag (bypasses CORS — works if GAS supports callback param)
-  var cbName = '_tszCB' + Date.now();
-  var timer;
-  var done = false;
-
-  window[cbName] = function(data){
-    done = true;
-    clearTimeout(timer);
-    var s = document.getElementById('_tszS');
-    if(s) s.remove();
-    delete window[cbName];
-    _tszLoad(data);
-  };
-
-  var s = document.createElement('script');
-  s.id  = '_tszS';
-  s.src = CFG.WA_URL + '?action=getAll&callback=' + cbName + '&t=' + Date.now();
-  
-  // Timeout fallback: if GAS doesn't support JSONP, try fetch
-  timer = setTimeout(function(){
-    if(done) return;
-    done = true;
-    var s2 = document.getElementById('_tszS');
-    if(s2) s2.remove();
-    delete window[cbName];
-    console.warn('[TSZ] JSONP timeout — trying fetch');
-    _tszFetch();
-  }, 5000);
-
-  s.onerror = function(){
-    if(done) return;
-    done = true;
-    clearTimeout(timer);
-    delete window[cbName];
-    console.warn('[TSZ] JSONP script error — trying fetch');
-    _tszFetch();
-  };
-
-  document.head.appendChild(s);
-}
-
-async function _tszFetch(){
-  // Direct fetch — works when CORS headers are present
-  const urls = [
-    CFG.WA_URL + '?action=getAll&t=' + Date.now(),
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.WA_URL + '?action=getAll'),
-  ];
-  for(const url of urls){
-    try{
-      const r = await fetch(url);
-      if(!r.ok) continue;
-      const txt = await r.text();
-      let data;
-      try{ data = JSON.parse(txt); }catch(e){ continue; }
-      if(data && data.ok && data.products && data.products.length > 0){
-        _tszLoad(data);
-        return;
-      }
-    }catch(e){ console.warn('[TSZ] fetch failed:', e.message); }
-  }
-  // Last resort: CSV proxy
-  try{
-    const r = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.SHEET_CSV));
-    if(r.ok){
-      const txt = await r.text();
-      const prods = parseCSV(txt);
-      if(prods.length > 0){
-        allProducts = prods;
-        setSyncLive(allProducts.length + ' productos');
-        renderProducts(allProducts);
-        updateCatImages(allProducts);
-        updateCatCounts(allProducts);
-        return;
-      }
+  function done(prods) {
+    allProducts = prods;
+    renderProducts(allProducts);
+    updateCatImages(allProducts);
+    updateCatCounts(allProducts);
+    var hc = document.getElementById('heroStatCount');
+    if (hc && allProducts.length > 0) hc.textContent = allProducts.length + '+';
+    if (allProducts.length > 0 && allProducts !== DEMO) {
+      setSyncLive(allProducts.length + ' productos');
+    } else {
+      setSyncOff('Modo demo');
     }
-  }catch(e){}
-  // Demo
-  allProducts = DEMO;
-  setSyncOff('Sin conexion — modo demo');
-  renderProducts(allProducts);
-  updateCatImages(allProducts);
-  updateCatCounts(allProducts);
+  }
+
+  // 1. CSV directo
+  fetch(CSV_URL + '&t=' + Date.now())
+    .then(function(r) { return r.text(); })
+    .then(function(txt) {
+      var p = parseCSV(txt);
+      if (p.length > 0) { console.log('[TSZ] CSV OK:', p.length); done(p); return; }
+      throw new Error('0 productos');
+    })
+    .catch(function() {
+      // 2. Proxy CORS
+      fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL))
+        .then(function(r) { return r.text(); })
+        .then(function(txt) {
+          var p = parseCSV(txt);
+          if (p.length > 0) { console.log('[TSZ] Proxy OK:', p.length); done(p); return; }
+          throw new Error('0 productos proxy');
+        })
+        .catch(function() {
+          // 3. Demo
+          console.warn('[TSZ] Usando demo');
+          done(DEMO);
+        });
+    });
 }
 
 
@@ -1970,7 +1898,32 @@ function addQtyImg(btn, qty){
 }
 
 /* Init */
-loadProducts();
+// Mostrar productos demo INMEDIATAMENTE
+allProducts = DEMO;
+renderProducts(allProducts);
+updateCatImages(allProducts);
+updateCatCounts(allProducts);
+
+// Luego intentar cargar del CSV en segundo plano
+setTimeout(function() {
+  var CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv";
+  fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL))
+    .then(function(r){ return r.text(); })
+    .then(function(txt){
+      var p = parseCSV(txt);
+      if(p.length > 0){
+        allProducts = p;
+        renderProducts(allProducts);
+        updateCatImages(allProducts);
+        updateCatCounts(allProducts);
+        setSyncLive(allProducts.length + ' productos');
+        var hc = document.getElementById('heroStatCount');
+        if(hc) hc.textContent = allProducts.length + '+';
+        console.log('[TSZ] Sheet cargado:', p.length, 'productos');
+      }
+    })
+    .catch(function(e){ console.warn('[TSZ] Sin CSV:', e.message); });
+}, 100);
 
 /* ══════════════════════════════════
    QUICK VIEW
