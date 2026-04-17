@@ -510,7 +510,11 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
         <input class="topbar-search" type="text" placeholder="Buscar producto…" oninput="searchProducts(this.value)" id="topSearch"/>
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
       </div>
-      <div class="user-chip"><div class="dot"></div><span id="userChipName">admin</span></div>
+      <button onclick="manualSync()" style="background:var(--B3);border:1px solid var(--B5);color:var(--W3);padding:7px 14px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s" onmouseover="this.style.borderColor='var(--R)';this.style.color='var(--W)'" onmouseout="this.style.borderColor='var(--B5)';this.style.color='var(--W3)'">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+  Sincronizar
+</button>
+<div class="user-chip"><div class="dot"></div><span id="userChipName">admin</span></div>
     </div>
   </div>
 
@@ -596,7 +600,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
         <div class="step"><div class="step-num">4</div><p>Pega esa misma URL en <strong>CFG.SHEET_CSV</strong> dentro del archivo de la tienda</p></div>
       </div>
       <div class="url-input-wrap">
-        <input type="text" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv"/>
+        <input type="text" id="sheetUrl" value="https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv"/>
         <button class="btn-connect" onclick="connectSheet()">
           <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
           Conectar
@@ -722,12 +726,14 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
    CREDENTIALS — cambia aquí
 ══════════════════════════════════ */
 const CREDENTIALS = { user: 'admin', pass: 'sweetzone2026' };
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx_v0Xa_52i356iAGpcZRqRylTGOdYQIxqIZJgnHmZkYvGlyK9QOqDkvi48oGuaNeEMXw/exec';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv';
 
 /* ══════════════════════════════════
    STATE
 ══════════════════════════════════ */
 let products = [];        // productos en memoria
-let sheetUrl = '';        // URL del Google Sheet CSV
+let sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv';        // URL del Google Sheet CSV
 let tableFilter = 'Todos';
 let searchQuery = '';
 let pendingDeleteIdx = -1;
@@ -795,10 +801,37 @@ window.addEventListener('resize', checkMob); checkMob();
 function saveToStorage(){ localStorage.setItem('tsz_products', JSON.stringify(products)); localStorage.setItem('tsz_sheetUrl', sheetUrl); }
 function loadFromStorage(){
   const p = localStorage.getItem('tsz_products');
-  const s = localStorage.getItem('tsz_sheetUrl');
   if(p){ try{ products=JSON.parse(p); }catch(e){ products=[]; } }
-  if(s){ sheetUrl=s; document.getElementById('sheetUrl').value=s; updateSheetStatus(true,products.length+' productos'); }
-  renderDashboard(); renderTable();
+  // Always sync fresh from CSV on login
+  sheetUrl = CSV_URL;
+  document.getElementById('sheetUrl').value = CSV_URL;
+  fetchAndSync();
+}
+
+async function fetchAndSync(){
+  try{
+    const res = await fetch(CSV_URL);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text = await res.text();
+    const parsed = parseCSV(text);
+    if(parsed.length){
+      products = parsed;
+      saveToStorage();
+      updateSheetStatus(true, parsed.length+' productos sincronizados');
+      toast('Inventario sincronizado: '+parsed.length+' productos','success');
+    } else {
+      updateSheetStatus(true, 'Sheet vacío');
+      toast('El Sheet está vacío — agrega productos desde el panel','info');
+    }
+  } catch(e){
+    // fallback to localStorage
+    const p = localStorage.getItem('tsz_products');
+    if(p){ try{ products=JSON.parse(p); }catch(ex){ products=[]; } }
+    updateSheetStatus(false,'Sin conexión — usando datos locales');
+    toast('No se pudo sincronizar: '+e.message,'error');
+  }
+  renderDashboard();
+  renderTable();
 }
 
 /* ══════════════════════════════════
@@ -994,8 +1027,16 @@ function saveProduct(){
   if(!imagen){ toast('La URL de imagen es requerida','error'); shakeInput('fImagen'); return; }
 
   const prod = { nombre, categoria, sku, imagen, badge };
-  if(idx>=0){ products[idx]=prod; toast('Producto actualizado','success'); }
-  else { products.push(prod); toast('Producto agregado','success'); }
+  if(idx>=0){
+    const existingId = products[idx]?.id || '';
+    products[idx]=prod;
+    toast('Producto actualizado','success');
+    syncToSheet('update', prod, existingId);
+  } else {
+    products.push(prod);
+    toast('Producto agregado','success');
+    syncToSheet('add', prod, '');
+  }
   saveToStorage();
   closeModal();
   renderTable();
@@ -1043,12 +1084,14 @@ function closeConfirm(){
 function doDelete(){
   if(pendingDeleteIdx<0) return;
   const name = products[pendingDeleteIdx].nombre;
+  const deletedId = products[pendingDeleteIdx]?.id || '';
   products.splice(pendingDeleteIdx,1);
   saveToStorage();
   closeConfirm();
   renderTable();
   renderDashboard();
   toast('"'+name+'" eliminado','info');
+  if(deletedId) syncToSheet('delete', null, deletedId);
 }
 
 /* close modals on veil click */
