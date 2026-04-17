@@ -266,8 +266,8 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   position:absolute;
   inset:0;
   background:
-    linear-gradient(to bottom, rgba(7,5,10,.55) 0%, transparent 35%, transparent 55%, rgba(7,5,10,.85) 100%),
-    linear-gradient(135deg, rgba(200,39,45,.08) 0%, transparent 60%);
+    linear-gradient(to right, rgba(0,0,0,.88) 0%, rgba(0,0,0,.6) 45%, rgba(0,0,0,.25) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.3) 0%, transparent 40%, rgba(0,0,0,.7) 100%);
 }
 
 /* CONTENT */
@@ -277,111 +277,81 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   flex:1;
   display:flex;
   flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:calc(var(--hh) + 60px) clamp(20px,6vw,80px) 60px;
+  align-items:flex-start;
+  justify-content:flex-end;
+  text-align:left;
+  padding:calc(var(--hh) + 40px) clamp(24px,8vw,120px) 100px;
   gap:0;
+  max-width:900px;
 }
 
 /* EYEBROW */
 .hero-eyebrow{
   display:inline-flex;
   align-items:center;
-  gap:14px;
+  gap:12px;
   font-size:.6rem;
-  font-weight:700;
-  letter-spacing:6px;
+  font-weight:600;
+  letter-spacing:5px;
   text-transform:uppercase;
-  color:var(--R2);
-  margin-bottom:28px;
+  color:rgba(255,255,255,.45);
+  margin-bottom:24px;
   opacity:0;
-  animation:fadeIn .8s .3s var(--ease) forwards;
+  animation:fadeIn .8s .2s var(--ease) forwards;
 }
-.hero-eyebrow::before{
-  content:'';
-  width:28px;
-  height:1.5px;
-  background:var(--R2);
-  border-radius:1px;
-  animation:lineGrow .7s .4s var(--ease) both;
-  transform-origin:left;
-  flex-shrink:0;
-}
+.hero-eyebrow::before{display:none}
 
-/* H1 */
+/* H1 — una fuente, limpia, profesional */
 .hero-h1{
-  font-size:clamp(3.6rem,9vw,10rem);
-  line-height:.85;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3.8rem,8vw,9rem);
+  line-height:1.0;
   font-weight:700;
-  margin-bottom:32px;
+  margin-bottom:36px;
   overflow:hidden;
   width:100%;
+  max-width:860px;
 }
-.hero-h1 .line{display:block;overflow:hidden;padding-bottom:.08em}
+.hero-h1 .line{display:block;overflow:hidden}
 .hero-h1 .line-inner{
   display:block;
   opacity:0;
-  transform:translateY(110%) skewY(4deg);
-  animation:textReveal 1s var(--ease) forwards;
+  transform:translateY(100%);
+  animation:textReveal .9s var(--ease) forwards;
 }
-/* Line 1 — light label */
 .hero-h1 .line:nth-child(1) .line-inner{
   animation-delay:.4s;
-  font-family:'Outfit',sans-serif;
-  font-weight:200;
-  font-size:.42em;
-  letter-spacing:8px;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.6);
+  color:#fff;
+  font-style:normal;
 }
-/* Line 2 — Playfair italic RED star */
 .hero-h1 .line:nth-child(2) .line-inner{
-  animation-delay:.6s;
-  font-family:'Playfair Display',serif;
+  animation-delay:.55s;
+  color:#fff;
   font-style:italic;
-  font-weight:900;
-  color:var(--W);
-  font-size:1em;
-  text-shadow:0 4px 40px rgba(200,39,45,.5);
 }
-/* Line 3 — Bebas shimmer */
 .hero-h1 .line:nth-child(3) .line-inner{
-  animation-delay:.8s;
-  font-family:'Bebas Neue',sans-serif;
-  font-weight:400;
-  font-size:.82em;
-  letter-spacing:8px;
-  background:linear-gradient(90deg,
-    var(--R) 0%,
-    var(--R2) 30%,
-    #ff6b6b 50%,
-    var(--R2) 70%,
-    var(--R) 100%
-  );
-  background-size:300% 100%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  animation:textReveal 1s .8s var(--ease) forwards, gradShift 4s 2.2s linear infinite;
+  animation-delay:.7s;
+  color:var(--R2);
+  font-style:italic;
 }
 
 /* PARAGRAPH */
 .hero-p{
-  font-size:clamp(.9rem,2.2vw,1.05rem);
-  color:rgba(255,255,255,.75);
-  line-height:1.8;
-  max-width:520px;
-  margin:0 auto 36px;
+  font-size:clamp(.95rem,2vw,1.08rem);
+  color:rgba(255,255,255,.6);
+  line-height:1.75;
+  max-width:500px;
+  margin:0 0 32px;
+  font-weight:300;
   opacity:0;
-  animation:fadeUp .9s 1.05s var(--ease) forwards;
+  animation:fadeUp .9s .9s var(--ease) forwards;
 }
 
 /* PRICE CHIPS */
 .hero-chips{
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   gap:12px;
   flex-wrap:wrap;
   margin-bottom:40px;
@@ -417,7 +387,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   display:flex;
   gap:14px;
   flex-wrap:wrap;
-  justify-content:center;
+  justify-content:flex-start;
   opacity:0;
   animation:fadeUp .8s 1.4s var(--ease) forwards;
 }
@@ -797,85 +767,82 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 
 
 /* QUICK VIEW */
-.qv-veil{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;opacity:0;pointer-events:none;transition:opacity .35s;backdrop-filter:blur(8px)}
+
 .qv-veil.open{opacity:1;pointer-events:all}
-.qv-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(860px,96vw);max-height:90vh;overflow-y:auto;background:#0a0a0a;border:1px solid #1a1a1a;border-top:2px solid var(--R);border-radius:10px;z-index:801;opacity:0;pointer-events:none;transition:all .4s var(--ease)}
+
 .qv-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all}
 .qv-modal::-webkit-scrollbar{width:3px}.qv-modal::-webkit-scrollbar-thumb{background:var(--R3);border-radius:2px}
-.qv-close{position:absolute;top:14px;right:14px;background:#1a1a1a;border:1px solid #2a2a2a;width:36px;height:36px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .2s}
-.qv-close:hover{background:var(--R)}.qv-close svg{width:16px;height:16px;fill:#fff}
-.qv-body{display:grid;grid-template-columns:1fr 1fr;min-height:420px}
-.qv-img-wrap{position:relative;overflow:hidden;background:#000;border-radius:8px 0 0 8px}
+
+.qv-close svg{width:16px;height:16px;fill:#fff}
+
+
 .qv-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
 .qv-modal.open .qv-img-wrap img{transform:scale(1.03)}
-.qv-badge{position:absolute;top:14px;left:14px}
-.qv-info{padding:32px 28px;display:flex;flex-direction:column;gap:0}
-.qv-cat{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:8px}
-.qv-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:6px}
-.qv-sku{font-family:'Space Mono',monospace;font-size:.65rem;color:#555;margin-bottom:18px}
-.qv-prices{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;padding:14px;background:#111;border-radius:6px;border:1px solid #1a1a1a}
-.qv-price-row{display:flex;justify-content:space-between;align-items:center}
+
+
+
+
+
+
+
 .qv-price-row.highlight{border-top:1px solid #1a1a1a;padding-top:8px;margin-top:4px}
-.qv-price-label{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.5px}
-.qv-price-val{font-family:'Space Mono',monospace;font-size:1.1rem;color:#fff;font-weight:700}
+
+
 .qv-price-val.red{color:var(--R2)}
-.qv-savings{font-size:.75rem;color:#22aa4a;background:rgba(34,170,74,.08);border:1px solid rgba(34,170,74,.15);padding:7px 12px;border-radius:4px;margin-bottom:16px;display:none}
+
 .qv-savings.show{display:block}
-.qv-qty-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:600;margin-bottom:8px}
-.qv-qty-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.qv-preset{padding:7px 14px;background:#111;border:1px solid #222;border-radius:4px;color:rgba(255,255,255,.6);font-size:.78rem;font-family:'Space Mono',monospace;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+
+
+
 .qv-preset:hover,.qv-preset.on{background:rgba(200,39,45,.15);border-color:rgba(200,39,45,.4);color:#fff}
-.qv-deal{font-size:.58rem;color:var(--R2);font-weight:700}
-.qv-custom-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.qv-minus,.qv-plus{width:32px;height:32px;background:#111;border:1px solid #222;color:#fff;border-radius:4px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
-.qv-minus:hover,.qv-plus:hover{background:var(--R)}
-.qv-qty-val{font-family:'Space Mono',monospace;font-size:1.1rem;color:#fff;font-weight:700;min-width:36px;text-align:center}
-.qv-total{font-family:'Space Mono',monospace;font-size:.9rem;color:var(--R2);font-weight:700;margin-left:auto}
-.qv-add-btn{display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;background:var(--R);color:#fff;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;width:100%}
-.qv-add-btn:hover{background:var(--R2);transform:translateY(-1px)}
+
+
+.qv-minus,
+.qv-minus:hover,
+
+
+
+
 .qv-add-btn svg{width:16px;height:16px;fill:#fff}
-@media(max-width:640px){.qv-body{grid-template-columns:1fr}.qv-img-wrap{height:220px;border-radius:8px 8px 0 0}.qv-modal{width:100vw;max-height:100vh;top:auto;bottom:0;left:0;right:0;transform:translateY(100%) scale(1);border-radius:14px 14px 0 0;border-top:2px solid var(--R)}.qv-modal.open{transform:translateY(0) scale(1)}}
 
-/* TESTIMONIALS */
-.testi-section{padding:100px var(--pad);background:#000}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
-.testi-card{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:8px;padding:28px;transition:border-color .3s,transform .3s var(--ease);position:relative}
-.testi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--R);border-radius:8px 8px 0 0;transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
-.testi-card:hover{border-color:rgba(200,39,45,.25);transform:translateY(-4px)}.testi-card:hover::before{transform:scaleX(1)}
-.testi-stars{color:var(--R2);font-size:1rem;letter-spacing:2px;margin-bottom:14px}
-.testi-text{font-size:.9rem;color:rgba(255,255,255,.7);line-height:1.75;margin-bottom:20px;font-style:italic}
-.testi-author{display:flex;align-items:center;gap:12px}
-.testi-avatar{width:38px;height:38px;background:var(--R3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;flex-shrink:0;border:1px solid rgba(200,39,45,.3)}
-.testi-name{font-size:.84rem;font-weight:600;color:#fff}
-.testi-role{font-size:.68rem;color:rgba(255,255,255,.35);margin-top:2px}
-@media(max-width:900px){.testi-grid{grid-template-columns:1fr}}
-@media(max-width:640px){.testi-grid{grid-template-columns:1fr}}
 
-/* PROFIT CALCULATOR */
-.calc-section{padding:100px var(--pad);background:#060606;border-top:1px solid #111}
-.calc-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
-.calc-desc{font-size:.92rem;color:rgba(255,255,255,.55);line-height:1.8;margin:16px 0 20px}
-.calc-note{display:flex;align-items:center;gap:8px;font-size:.76rem;color:rgba(255,255,255,.45);background:#111;border:1px solid #1a1a1a;padding:10px 14px;border-radius:5px}
-.calc-card{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:20px}
-.calc-field label{display:block;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:600;margin-bottom:10px}
-.calc-input-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.calc-input-row input{flex:1;background:#111;border:1px solid #222;border-bottom:2px solid #333;padding:10px 14px;color:#fff;font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;border-radius:4px;outline:none;text-align:center;transition:border-color .2s;width:100%}
-.calc-input-row input:focus{border-bottom-color:var(--R)}
-.calc-adj{width:38px;height:38px;background:#111;border:1px solid #222;color:rgba(255,255,255,.6);border-radius:4px;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.calc-adj:hover{background:var(--R);color:#fff;border-color:var(--R)}
-.calc-presets{display:flex;gap:6px;flex-wrap:wrap}
-.calc-presets button{padding:5px 12px;background:#111;border:1px solid #222;color:rgba(255,255,255,.5);border-radius:4px;font-size:.75rem;font-family:'Space Mono',monospace;cursor:pointer;transition:all .2s}
-.calc-presets button:hover{border-color:rgba(200,39,45,.4);color:#fff;background:rgba(200,39,45,.1)}
-.calc-presets button.featured{border-color:rgba(200,39,45,.3);color:var(--R2)}
-.calc-result{background:#111;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:8px}
-.cr-row{display:flex;justify-content:space-between;align-items:center;font-size:.8rem}
-.cr-row span:first-child{color:rgba(255,255,255,.5)}
-.cr-row span:last-child{font-family:'Space Mono',monospace;color:#fff;font-weight:700}
-.cr-divider{height:1px;background:#222;margin:4px 0}
-.cr-row.profit span:first-child{color:#fff;font-weight:700;font-size:.9rem}
-.cr-row.profit span:last-child{font-size:1.2rem;color:#22aa4a}
-.cr-row.margin span:last-child{color:var(--R2)}
-@media(max-width:900px){.calc-inner{grid-template-columns:1fr;gap:40px}}
+
+
+
+/* ═══ FLOATING WHATSAPP ═══ */
+.wa-float{position:fixed;bottom:28px;right:28px;z-index:800;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;text-decoration:none;padding:14px 20px 14px 16px;border-radius:50px;box-shadow:0 4px 24px rgba(37,211,102,.35);transition:transform .3s var(--ease),box-shadow .3s;animation:fadeUp .8s 2s var(--ease) both}
+.wa-float:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 8px 32px rgba(37,211,102,.5)}
+.wa-float svg{width:24px;height:24px;fill:#fff;flex-shrink:0}
+.wa-float-label{font-size:.78rem;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+@media(max-width:560px){.wa-float-label{display:none}.wa-float{padding:14px;border-radius:50%}}
+
+/* ═══ RESELLER SECTION ═══ */
+.reseller-section{padding:100px var(--pad);background:#000;border-top:1px solid #111}
+.reseller-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;max-width:1200px;margin:0 auto}
+.reseller-left>p{font-size:.94rem;color:rgba(255,255,255,.6);line-height:1.8;margin:20px 0 32px}
+.reseller-steps{display:flex;flex-direction:column;gap:22px}
+.rs-step{display:flex;gap:18px;align-items:flex-start}
+.rs-num{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--R2);font-weight:700;letter-spacing:1px;background:rgba(200,39,45,.1);border:1px solid rgba(200,39,45,.2);padding:6px 10px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.rs-step strong{display:block;font-size:.92rem;color:#fff;margin-bottom:4px}
+.rs-step p{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.6;margin:0}
+.reseller-pricing-card{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:28px;border-top:2px solid var(--R)}
+.rpc-tag{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:20px}
+.rpc-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #111;font-size:.84rem}
+.rpc-row.header{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);font-weight:700;padding-bottom:8px}
+.rpc-row.highlight{background:rgba(200,39,45,.06);padding:14px 10px;border-radius:6px;border-bottom:none;margin:6px -10px}
+.rpc-price{font-family:'Space Mono',monospace;font-weight:700;color:#fff}
+.rpc-price.red,.rpc-total.red{color:var(--R2)}
+.rpc-total{font-family:'Space Mono',monospace;color:rgba(255,255,255,.5)}
+.rpc-savings{text-align:center;font-size:.78rem;color:rgba(255,255,255,.4);padding:14px 0;border-bottom:1px solid #111}
+.rpc-savings strong{color:#fff}
+.rpc-divider{height:1px;background:#111;margin:16px 0}
+.rpb-label{font-size:.7rem;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-bottom:12px}
+.rpb-row{display:flex;justify-content:space-between;font-size:.84rem;color:rgba(255,255,255,.6);padding:6px 0}
+.rpb-row span:last-child{font-family:'Space Mono',monospace;color:#fff}
+.rpb-row.profit{border-top:1px solid #1a1a1a;padding-top:12px;margin-top:4px;font-weight:700;color:#fff}
+.rpb-row.profit span:last-child{color:var(--R2);font-size:1.05rem}
+@media(max-width:900px){.reseller-inner{grid-template-columns:1fr;gap:48px}}
+@media(max-width:560px){.reseller-section{padding:72px 20px}}
 
 </style>
 </head>
@@ -899,145 +866,13 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 </div>
 
 
-<!-- QUICK VIEW MODAL -->
-<div class="qv-veil" id="qvVeil" onclick="closeQV()"></div>
-<div class="qv-modal" id="qvModal">
-  <button class="qv-close" onclick="closeQV()">
-    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-  </button>
-  <div class="qv-body">
-    <div class="qv-img-wrap">
-      <img id="qvImg" src="" alt=""/>
-      <div class="qv-badge" id="qvBadge"></div>
-    </div>
-    <div class="qv-info">
-      <div class="qv-cat" id="qvCat"></div>
-      <h2 class="qv-name" id="qvName"></h2>
-      <div class="qv-sku" id="qvSku"></div>
-      <div class="qv-prices">
-        <div class="qv-price-row">
-          <span class="qv-price-label">Precio unitario</span>
-          <span class="qv-price-val" id="qvUnit"></span>
-        </div>
-        <div class="qv-price-row highlight">
-          <span class="qv-price-label">Mayoreo 200+ uds</span>
-          <span class="qv-price-val red" id="qvBulk"></span>
-        </div>
-      </div>
-      <div class="qv-savings" id="qvSavings"></div>
-      <div class="qv-qty-label">Cantidad</div>
-      <div class="qv-qty-row">
-        <button class="qv-preset" onclick="setQVQty(1)">1</button>
-        <button class="qv-preset" onclick="setQVQty(100)">100</button>
-        <button class="qv-preset" onclick="setQVQty(200)">200 <span class="qv-deal">$3.99</span></button>
-        <button class="qv-preset" onclick="setQVQty(400)">400 <span class="qv-deal">$3.99</span></button>
-      </div>
-      <div class="qv-custom-row">
-        <button class="qv-minus" onclick="adjQVQty(-1)">−</button>
-        <span class="qv-qty-val" id="qvQtyVal">1</span>
-        <button class="qv-plus" onclick="adjQVQty(1)">+</button>
-        <span class="qv-total" id="qvTotal"></span>
-      </div>
-      <button class="qv-add-btn" id="qvAddBtn" onclick="addFromQV()">
-        <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5l3 3 3-3zm-3 6H2v2h6v5l3-3 3 3v-5h6v-2H13V9h-2v6z"/></svg>
-        Agregar al Carrito
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- CART VEIL + DRAWER -->
-<div class="cart-veil" id="cartVeil"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-hdr">
-    <div>
-      <h3>Tu Carrito</h3>
-      <span id="cartHdrCount" style="font-size:.72rem;color:var(--W3);font-family:'Space Mono',monospace;display:block;margin-top:2px"></span>
-    </div>
-    <button class="cart-x" id="cartClose"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-  </div>
-  <div class="cart-wholesale-note" id="wholesaleNote">
-    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-    ¡Mayoreo activo! 200+ uds = <strong style="margin-left:4px">$3.99 c/u</strong>
-  </div>
-  <div class="cart-body" id="cartBody">
-    <div class="cart-empty" id="cartEmptyState">
-      <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h11v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H18c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0022.46 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-      <p>Tu carrito está vacío</p>
-      <a href="#products" onclick="closeCartFn()" style="display:inline-block;margin-top:12px;padding:9px 22px;background:var(--R);color:var(--W);border-radius:4px;font-size:.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none">Ver Productos →</a>
-    </div>
-  </div>
-  <div class="cart-ftr" id="cartFtr" style="display:none">
-    <div id="cartSummary"></div>
-
-    <!-- CUSTOMER FORM -->
-    <div class="cart-form-section">
-      <div class="cart-form-title">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--R2)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        Datos del cliente
-      </div>
-      <div class="cart-form-row">
-        <div class="cart-form-field">
-          <label>Nombre *</label>
-          <input type="text" id="cfNombre" placeholder="Tu nombre"/>
-        </div>
-        <div class="cart-form-field">
-          <label>Apellido *</label>
-          <input type="text" id="cfApellido" placeholder="Tu apellido"/>
-        </div>
-      </div>
-
-      <div class="cart-form-title" style="margin-top:14px">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--R2)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        Entrega
-      </div>
-      <div class="cart-ship-opts">
-        <label class="ship-opt" id="soPickup">
-          <input type="radio" name="shipType" value="pickup" checked onchange="toggleShipping(this.value)"/>
-          <span class="ship-icon">🏪</span>
-          <span>Retiro en tienda</span>
-        </label>
-        <label class="ship-opt" id="soDelivery">
-          <input type="radio" name="shipType" value="delivery" onchange="toggleShipping(this.value)"/>
-          <span class="ship-icon">🚚</span>
-          <span>Con envío</span>
-        </label>
-      </div>
-      <div id="shippingAddr" style="display:none;margin-top:10px">
-        <div class="cart-form-field">
-          <label>Dirección / Ubicación</label>
-          <input type="text" id="cfDireccion" placeholder="Ciudad, sector, referencia…"/>
-        </div>
-      </div>
-
-      <div class="cart-form-title" style="margin-top:14px">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--R2)"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-        Método de pago
-      </div>
-      <div class="cart-pay-opts" id="payOpts">
-        <button class="pay-btn" onclick="selectPay(this,'Bolívares / Pago Móvil')">🏦 Bolívares / Pagomóvil</button>
-        <button class="pay-btn" onclick="selectPay(this,'Binance Pay')">🟡 Binance Pay</button>
-        <button class="pay-btn" onclick="selectPay(this,'Zelle')">💙 Zelle</button>
-        <button class="pay-btn" onclick="selectPay(this,'Efectivo')">💵 Efectivo</button>
-        <button class="pay-btn" onclick="selectPay(this,'A convenir')">🤝 A convenir</button>
-      </div>
-      <input type="hidden" id="cfPago" value=""/>
-    </div>
-
-    <button class="btn-wa-order" id="btnWaOrder">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Confirmar Pedido por WhatsApp
-    </button>
-    <p class="cart-note">Respondemos en menos de 24h · +1 (786) 419-5886</p>
-  </div>
-</div>
-
 <!-- MOBILE NAV -->
 <nav class="mob-nav" id="mobNav">
   <a href="#home" onclick="closeMob()">Inicio</a>
   <a href="#tsz" onclick="closeMob()">Sweet Zone</a>
   <a href="#categories" onclick="closeMob()">Categorías</a>
   <a href="#products" onclick="closeMob()">Productos</a>
+  <a href="#mayoreo" onclick="closeMob()">Mayoreo</a>
   <a href="#contact" onclick="closeMob()">Contacto</a>
   <div class="mob-search-wrap">
     <input type="text" placeholder="Buscar productos…" oninput="handleSearch(this.value)"/>
@@ -1055,6 +890,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     <li><a href="#categories">Categorías</a></li>
     <li><a href="#products">Productos</a></li>
     <li><a href="#calculator">Calculadora</a></li>
+    <li><a href="#mayoreo">Mayoreo</a></li>
     <li><a href="#contact">Contacto</a></li>
   </ul>
   <div class="hdr-right">
@@ -1089,12 +925,12 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     <div class="hero-eyebrow">Tu tienda de confianza</div>
 
     <h1 class="hero-h1">
-      <span class="line"><span class="line-inner">Belleza &amp; Cuidado</span></span>
-      <span class="line"><span class="line-inner">en un solo lugar</span></span>
-      <span class="line"><span class="line-inner">THE SWEET ZONE</span></span>
+      <span class="line"><span class="line-inner">Calidad real.</span></span>
+      <span class="line"><span class="line-inner">Precios que</span></span>
+      <span class="line"><span class="line-inner">funcionan.</span></span>
     </h1>
 
-    <p class="hero-p">Productos de calidad para uso personal o para reventa. Precio unitario accesible y mayoreo desde 200 unidades — porque tu negocio también merece la mejor oferta.</p>
+    <p class="hero-p">Maquillaje, Salud &amp; Belleza a $4.99 la unidad. Precio especial de mayoreo desde 200 unidades para revendedores.</p>
 
     <div class="hero-chips">
       <div class="hero-chip">
@@ -1240,6 +1076,66 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   <div class="p-empty" id="pEmpty">No se encontraron productos.</div>
 </section>
 
+
+<!-- ════════════════════════════
+     MAYOREO / REVENDEDORES
+════════════════════════════ -->
+<section class="reseller-section" id="mayoreo">
+  <div class="reseller-inner">
+    <div class="reseller-left reveal fl">
+      <div class="sec-label">Para revendedores</div>
+      <h2 class="sec-h">Haz crecer tu<br><em>negocio</em> con nosotros.</h2>
+      <p>The Sweet Zone es el proveedor que tu negocio necesita. Precios especiales de mayoreo, catálogo amplio y pedidos por WhatsApp sin complicaciones.</p>
+      <div class="reseller-steps">
+        <div class="rs-step">
+          <div class="rs-num">01</div>
+          <div><strong>Elige tus productos</strong><p>Navega el catálogo y selecciona lo que quieres revender.</p></div>
+        </div>
+        <div class="rs-step">
+          <div class="rs-num">02</div>
+          <div><strong>Agrega 200+ unidades</strong><p>El precio mayoreo se aplica automáticamente en el carrito.</p></div>
+        </div>
+        <div class="rs-step">
+          <div class="rs-num">03</div>
+          <div><strong>Confirma por WhatsApp</strong><p>Recibe confirmación en menos de 24h y empieza a vender.</p></div>
+        </div>
+      </div>
+      <a href="https://wa.me/17864195886?text=Hola%2C%20quiero%20información%20sobre%20precios%20de%20mayoreo" target="_blank" class="btn-prim" style="margin-top:32px">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Consultar mayoreo por WhatsApp
+      </a>
+    </div>
+    <div class="reseller-right reveal fr d1">
+      <div class="reseller-pricing-card">
+        <div class="rpc-tag">Comparativa de precios</div>
+        <div class="rpc-row header">
+          <span>Cantidad</span><span>Precio c/u</span><span>Total 200 uds</span>
+        </div>
+        <div class="rpc-row">
+          <span>1 – 199 uds</span>
+          <span class="rpc-price">$4.99</span>
+          <span class="rpc-total">$998.00</span>
+        </div>
+        <div class="rpc-row highlight">
+          <span>200+ uds ✦</span>
+          <span class="rpc-price red">$3.99</span>
+          <span class="rpc-total red">$798.00</span>
+        </div>
+        <div class="rpc-savings">
+          Ahorras <strong>$200</strong> por cada 200 unidades
+        </div>
+        <div class="rpc-divider"></div>
+        <div class="rpc-profit-box">
+          <div class="rpb-label">Si vendes a $8 c/u (200 uds)</div>
+          <div class="rpb-row"><span>Inversión</span><span>$798.00</span></div>
+          <div class="rpb-row"><span>Ingresos</span><span>$1,600.00</span></div>
+          <div class="rpb-row profit"><span>Ganancia</span><span>$802.00</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ════════════════════════════
      PROMO STRIP
 ════════════════════════════ -->
@@ -1260,111 +1156,12 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 <!-- ════════════════════════════
      TESTIMONIALS
 ════════════════════════════ -->
-<section class="testi-section" id="testimonials">
-  <div class="sec-label reveal fl">Lo que dicen</div>
-  <h2 class="sec-h reveal d1">Clientes que <em>confían.</em></h2>
-  <div class="testi-grid">
-    <div class="testi-card reveal d1">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Llevo 3 meses revendiendo y los productos vuelan. Calidad real a un precio que deja margen. Totalmente recomendado."</p>
-      <div class="testi-author">
-        <div class="testi-avatar">MR</div>
-        <div><div class="testi-name">María R.</div><div class="testi-role">Revendedora · Miami, FL</div></div>
-      </div>
-    </div>
-    <div class="testi-card reveal d2">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Pedí 400 unidades de maquillaje y el proceso fue rapidísimo. El precio mayoreo hace una diferencia enorme en mis ganancias."</p>
-      <div class="testi-author">
-        <div class="testi-avatar">CL</div>
-        <div><div class="testi-name">Carlos L.</div><div class="testi-role">Mayorista · Houston, TX</div></div>
-      </div>
-    </div>
-    <div class="testi-card reveal d3">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Los productos de Salud y Belleza son mis más vendidos. Mis clientes me piden más cada semana. The Sweet Zone nunca falla."</p>
-      <div class="testi-author">
-        <div class="testi-avatar">AP</div>
-        <div><div class="testi-name">Ana P.</div><div class="testi-role">Emprendedora · Orlando, FL</div></div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- ════════════════════════════
      PROFIT CALCULATOR
 ════════════════════════════ -->
-<section class="calc-section" id="calculator">
-  <div class="calc-inner">
-    <div class="calc-left reveal fl">
-      <div class="sec-label">Para revendedores</div>
-      <h2 class="sec-h">Calcula tu <em>ganancia.</em></h2>
-      <p class="calc-desc">Ingresa cuántas unidades quieres comprar y a qué precio las venderías — y ve exactamente cuánto ganarías.</p>
-      <div class="calc-note">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--R2)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-        El precio baja automáticamente a $3.99 con 200+ unidades
-      </div>
-    </div>
-    <div class="calc-right reveal fr d1">
-      <div class="calc-card">
-        <div class="calc-field">
-          <label>Unidades a comprar</label>
-          <div class="calc-input-row">
-            <button onclick="adjCalc('qty',-10)" class="calc-adj">−</button>
-            <input type="number" id="calcQty" value="100" min="1" max="9999" oninput="calcProfit()"/>
-            <button onclick="adjCalc('qty',10)" class="calc-adj">+</button>
-          </div>
-          <div class="calc-presets">
-            <button onclick="setCalc('qty',50)">50</button>
-            <button onclick="setCalc('qty',100)">100</button>
-            <button onclick="setCalc('qty',200)" class="featured">200 ✦</button>
-            <button onclick="setCalc('qty',500)">500</button>
-          </div>
-        </div>
-        <div class="calc-field">
-          <label>Precio de venta por unidad ($)</label>
-          <div class="calc-input-row">
-            <button onclick="adjCalc('price',-0.5)" class="calc-adj">−</button>
-            <input type="number" id="calcPrice" value="8.99" min="0.01" step="0.5" oninput="calcProfit()"/>
-            <button onclick="adjCalc('price',0.5)" class="calc-adj">+</button>
-          </div>
-          <div class="calc-presets">
-            <button onclick="setCalc('price',6.99)">$6.99</button>
-            <button onclick="setCalc('price',7.99)">$7.99</button>
-            <button onclick="setCalc('price',9.99)" class="featured">$9.99 ✦</button>
-            <button onclick="setCalc('price',12.99)">$12.99</button>
-          </div>
-        </div>
-        <div class="calc-result" id="calcResult">
-          <div class="cr-row">
-            <span>Costo total (compra)</span>
-            <span id="crCost">—</span>
-          </div>
-          <div class="cr-row">
-            <span>Ingresos totales (venta)</span>
-            <span id="crRevenue">—</span>
-          </div>
-          <div class="cr-row">
-            <span>Precio de compra c/u</span>
-            <span id="crBuyPrice">—</span>
-          </div>
-          <div class="cr-divider"></div>
-          <div class="cr-row profit">
-            <span>Ganancia neta</span>
-            <span id="crProfit">—</span>
-          </div>
-          <div class="cr-row margin">
-            <span>Margen</span>
-            <span id="crMargin">—</span>
-          </div>
-        </div>
-        <a href="#products" class="btn-prim" style="width:100%;justify-content:center;margin-top:4px" onclick="document.getElementById('calculator').scrollIntoView()">
-          Ver Productos <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- ════════════════════════════
      ABOUT
@@ -2029,5 +1826,10 @@ function setCalc(field, val) {
 calcProfit();
 
 </script>
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/17864195886" target="_blank" class="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-float-label">¿Preguntas?</span>
+</a>
 </body>
 </html>
