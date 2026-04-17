@@ -1201,11 +1201,6 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 
 
 <!-- ════════════════════════════
-     PROFIT CALCULATOR
-════════════════════════════ -->
-
-
-<!-- ════════════════════════════
      ABOUT
 ════════════════════════════ -->
 <section class="about-section" id="about">
@@ -1540,41 +1535,42 @@ const DEMO=[
 
 async function loadProducts(){
   showSkel();
-  if(!CFG.SHEET_CSV){ allProducts=DEMO; renderProducts(allProducts); updateCatImages(allProducts); return; }
 
-  // Try multiple fetch strategies to bypass CORS/cache issues
-  const urls = [
-    CFG.SHEET_CSV + '&t=' + Date.now(),          // cache-bust
-    CFG.SHEET_CSV,                                 // plain
-    CFG.SHEET_CSV.replace('pub?output=csv','pub?gid=0&output=csv'), // explicit sheet
-  ];
+  // Strategies: direct first, then CORS proxies
+  const direct = CFG.SHEET_CSV + '&t=' + Date.now();
+  const proxy1 = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.SHEET_CSV);
+  const proxy2 = 'https://corsproxy.io/?' + encodeURIComponent(CFG.SHEET_CSV);
+  const urls   = [direct, proxy1, proxy2];
 
   let loaded = false;
-  for(let i=0; i<urls.length; i++){
+  for(let attempt=0; attempt<urls.length; attempt++){
     try{
-      const r = await fetch(urls[i], {cache:'no-store'});
+      const r = await fetch(urls[attempt]);
       if(!r.ok) throw new Error('HTTP '+r.status);
-      const t = await r.text();
-      const parsed = parseCSV(t);
+      const txt = await r.text();
+      if(!txt || txt.trim().length < 10) throw new Error('Empty response');
+      const parsed = parseCSV(txt);
       if(parsed.length > 0){
         allProducts = parsed;
         setSyncLive(parsed.length + ' productos');
         loaded = true;
         break;
+      } else {
+        throw new Error('CSV parsed 0 products');
       }
-    }catch(e){ console.warn('CSV attempt '+(i+1)+' failed:', e.message); }
+    } catch(e){
+      console.warn('[TSZ] Attempt '+(attempt+1)+' failed:', e.message);
+    }
   }
 
   if(!loaded){
-    // Last resort: no-cors mode (can't read response but worth trying once)
-    console.warn('All fetch attempts failed — using demo products');
+    console.warn('[TSZ] All attempts failed — showing demo');
     allProducts = DEMO;
-    setSyncOff('Sin conexión — mostrando demo');
+    setSyncOff('Modo demo');
   }
 
   renderProducts(allProducts);
   updateCatImages(allProducts);
-  // Update hero stat count
   const heroCount = document.getElementById('heroStatCount');
   if(heroCount && allProducts.length > 0) heroCount.textContent = allProducts.length + '+';
 }
@@ -1685,7 +1681,8 @@ function renderProducts(prods){
     const badge=(bv==='new'||bv==='hot'||bv==='sale')?'<div class="p-badge"><span class="badge badge-'+bv+'">'+bl+'</span></div>':'';
     const pData=JSON.stringify(p).replace(/'/g,"&#39;");
     const delay=(i%4)*.1;
-    return `<div class="p-card reveal ${delays[i%6]}" data-cat="${p.categoria}" data-name="${p.nombre}" style="animation-delay:${delay}s" onclick="openPD(allProducts[i])">
+    const pidx = prods.indexOf(p); // real index in allProducts
+    return `<div class="p-card reveal ${delays[i%6]}" data-cat="${p.categoria}" data-name="${p.nombre}" style="animation-delay:${delay}s" onclick="openPD(allProducts[${pidx >= 0 ? pidx : i}])">
       ${badge}
       <div class="p-img">
         <img src="${p.imagen||'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=400&auto=format&fit=crop'}" alt="${p.nombre}" loading="lazy"/>
@@ -1777,14 +1774,15 @@ function clearProdSearch(){
   applyFilters();
 }
 function applyFilters(){
-  let filtered=curFilter==='Todos'?allProducts:allProducts.filter(p=>{
-    if(!p.categoria)return false;
-    const c=p.categoria.toLowerCase(),t=curFilter.toLowerCase();
-    return c===t||c.includes(t)||t.includes(c);
+  if(!allProducts || !allProducts.length){ renderProducts([]); return; }
+  let filtered = curFilter==='Todos' ? allProducts : allProducts.filter(p=>{
+    if(!p.categoria) return false;
+    const c = p.categoria.toLowerCase(), t = curFilter.toLowerCase();
+    return c===t || c.includes(t) || t.includes(c);
   });
-  if(prodSearch) filtered=filtered.filter(p=>
-    (p.nombre||'').toLowerCase().includes(prodSearch)||
-    (p.categoria||'').toLowerCase().includes(prodSearch)||
+  if(prodSearch) filtered = filtered.filter(p=>
+    (p.nombre||'').toLowerCase().includes(prodSearch) ||
+    (p.categoria||'').toLowerCase().includes(prodSearch) ||
     (p.sku||'').toLowerCase().includes(prodSearch)
   );
   renderProducts(filtered);
@@ -1913,43 +1911,6 @@ function addFromQV() {
 }
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeQV(); });
-
-/* ══════════════════════════════════
-   PROFIT CALCULATOR
-══════════════════════════════════ */
-function calcProfit() {
-  const qty   = Math.max(1, parseInt(document.getElementById('calcQty').value) || 0);
-  const price = Math.max(0.01, parseFloat(document.getElementById('calcPrice').value) || 0);
-  const buyPu  = qty >= CFG.BULK_MIN ? CFG.P_BULK : CFG.P_UNIT;
-  const cost    = (qty * buyPu).toFixed(2);
-  const revenue = (qty * price).toFixed(2);
-  const profit  = (qty * price - qty * buyPu).toFixed(2);
-  const margin  = price > 0 ? ((price - buyPu) / price * 100).toFixed(1) : 0;
-
-  document.getElementById('crCost').textContent     = '$' + cost;
-  document.getElementById('crRevenue').textContent  = '$' + revenue;
-  document.getElementById('crBuyPrice').textContent = '$' + buyPu.toFixed(2) + (qty >= CFG.BULK_MIN ? ' (mayoreo)' : '');
-  document.getElementById('crProfit').textContent   = '$' + profit;
-  document.getElementById('crMargin').textContent   = margin + '%';
-
-  const profitEl = document.getElementById('crProfit');
-  profitEl.style.color = parseFloat(profit) > 0 ? '#22aa4a' : 'var(--R2)';
-}
-
-function adjCalc(field, delta) {
-  const el = document.getElementById(field === 'qty' ? 'calcQty' : 'calcPrice');
-  const val = parseFloat(el.value) || 0;
-  el.value = field === 'qty' ? Math.max(1, Math.round(val + delta)) : Math.max(0.5, (val + delta).toFixed(2));
-  calcProfit();
-}
-
-function setCalc(field, val) {
-  document.getElementById(field === 'qty' ? 'calcQty' : 'calcPrice').value = val;
-  calcProfit();
-}
-
-// Init calculator
-calcProfit();
 
 
 /* ══════════════════════════
