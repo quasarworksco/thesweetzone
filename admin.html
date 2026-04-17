@@ -356,7 +356,6 @@ function doLogin(){
   }
 }
 function logout(){localStorage.removeItem('tsz_s');document.getElementById('LS').classList.remove('hide');document.getElementById('LU').value='';document.getElementById('LP').value='';}
-if(localStorage.getItem('tsz_s')==='1'){document.getElementById('LS').classList.add('hide');init();}
 
 /* ═══════ INIT ═══════ */
 function init(){
@@ -612,6 +611,8 @@ function toast(msg,type='i'){
   s.appendChild(el);
   setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(12px)';el.style.transition='all .3s';setTimeout(()=>el.remove(),300);},3200);
 }
+/* auto-login if session exists */
+if(localStorage.getItem('tsz_s')==='1'){document.getElementById('LS').classList.add('hide');init();}
 </script>
 </body>
 </html>
