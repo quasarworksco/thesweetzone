@@ -1540,10 +1540,38 @@ const DEMO=[
 
 async function loadProducts(){
   showSkel();
-  if(CFG.SHEET_CSV){
-    try{const r=await fetch(CFG.SHEET_CSV);const t=await r.text();allProducts=parseCSV(t);setSyncLive(allProducts.length+' productos sincronizados');}
-    catch(e){allProducts=DEMO;setSyncOff('Sin conexión al inventario — demo activo');}
-  }else{allProducts=DEMO;setSyncOff('Demo — conecta tu Google Sheet en CFG.SHEET_CSV');}
+  if(!CFG.SHEET_CSV){ allProducts=DEMO; renderProducts(allProducts); updateCatImages(allProducts); return; }
+
+  // Try multiple fetch strategies to bypass CORS/cache issues
+  const urls = [
+    CFG.SHEET_CSV + '&t=' + Date.now(),          // cache-bust
+    CFG.SHEET_CSV,                                 // plain
+    CFG.SHEET_CSV.replace('pub?output=csv','pub?gid=0&output=csv'), // explicit sheet
+  ];
+
+  let loaded = false;
+  for(let i=0; i<urls.length; i++){
+    try{
+      const r = await fetch(urls[i], {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const t = await r.text();
+      const parsed = parseCSV(t);
+      if(parsed.length > 0){
+        allProducts = parsed;
+        setSyncLive(parsed.length + ' productos');
+        loaded = true;
+        break;
+      }
+    }catch(e){ console.warn('CSV attempt '+(i+1)+' failed:', e.message); }
+  }
+
+  if(!loaded){
+    // Last resort: no-cors mode (can't read response but worth trying once)
+    console.warn('All fetch attempts failed — using demo products');
+    allProducts = DEMO;
+    setSyncOff('Sin conexión — mostrando demo');
+  }
+
   renderProducts(allProducts);
   updateCatImages(allProducts);
   // Update hero stat count
@@ -1567,31 +1595,82 @@ function updateCatImages(prods){
 }
 
 function parseCSV(txt){
-  const lines=txt.trim().split('\n').filter(l=>l.trim());
-  if(!lines.length) return [];
+  if(!txt || !txt.trim()) return [];
+  // Normalize line endings
+  const raw = txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  const lines = raw.split('\n').filter(l=>l.trim());
+  if(lines.length < 2) return []; // need at least header + 1 row
+
   function splitCSV(line){
-    line=line.replace(/\r/g,'');
     const r=[];let cur='',inQ=false;
     for(let i=0;i<line.length;i++){
       const c=line[i];
-      if(c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
-      else if(c===','&&!inQ){r.push(cur.trim());cur='';}
+      if(c==='"'){ if(inQ&&line[i+1]==='"'){cur+='"';i++;} else inQ=!inQ; }
+      else if(c===','&&!inQ){ r.push(cur.trim()); cur=''; }
       else cur+=c;
     }
-    r.push(cur.trim());return r;
+    r.push(cur.trim());
+    return r;
   }
-  const headers=splitCSV(lines[0]).map(h=>h.replace(/["\r:\s]/g,'').toLowerCase());
-  return lines.slice(1).map((line,ri)=>{
-    const vals=splitCSV(line);
-    const o={};headers.forEach((h,i)=>o[h]=(vals[i]||'').replace(/"/g,'').trim());
-    if(!o.nombre&&o.name)o.nombre=o.name;
-    if(!o.id)o.id='L'+(ri+1);
-    // Column G = descripcion (index 6 if no header match)
-    if(!o.descripcion&&!o.description&&!o.desc&&vals[6]) o.descripcion=vals[6].replace(/"/g,'').trim();
-    if(!o.descripcion&&o.description)o.descripcion=o.description;
-    if(!o.descripcion&&o.desc)o.descripcion=o.desc;
-    return o;
-  }).filter(p=>(p.nombre||'').trim());
+
+  const rawHeaders = splitCSV(lines[0]);
+  const headers = rawHeaders.map(h=>h.replace(/["\r:\s]/g,'').toLowerCase());
+  console.log('[TSZ] CSV headers:', headers);
+
+  // Column index helpers
+  function ci(names){
+    for(const n of names){ const i=headers.indexOf(n); if(i>=0)return i; }
+    return -1;
+  }
+  const iNombre    = ci(['nombre','name','producto','product']);
+  const iCategoria = ci(['categoria','category','cat','tipo']);
+  const iSku       = ci(['sku','code','codigo','ref']);
+  const iImagen    = ci(['imagen','image','img','foto','url']);
+  const iBadge     = ci(['badge','etiqueta','tag','label']);
+  const iId        = ci(['id']);
+  const iDesc      = ci(['descripcion','description','desc','detalle']);
+
+  function normCat(v){
+    const s=(v||'').toLowerCase();
+    if(s.includes('sweet')||s.includes('candy')) return 'Sweet Zone';
+    if(s.includes('salud')||s.includes('belleza')||s.includes('health')) return 'Salud y Belleza';
+    if(s.includes('maquill')||s.includes('cosmet')||s.includes('makeup')) return 'Maquillaje';
+    if(['Sweet Zone','Salud y Belleza','Maquillaje'].includes(v)) return v;
+    return v||'';
+  }
+  function normBadge(v){
+    const s=(v||'').toLowerCase().trim();
+    if(s.includes('new')||s.includes('nuevo')) return 'new';
+    if(s.includes('hot')||s.includes('popular')) return 'hot';
+    if(s.includes('sale')||s.includes('oferta')) return 'sale';
+    return '';
+  }
+
+  const products = [];
+  for(let ri=1; ri<lines.length; ri++){
+    const vals = splitCSV(lines[ri]);
+    if(!vals.length || !vals[0].trim()) continue;
+    const get = i => i>=0 ? (vals[i]||'').replace(/"/g,'').trim() : '';
+    const nombre    = iNombre>=0    ? get(iNombre)    : get(0);
+    const catRaw    = iCategoria>=0 ? get(iCategoria) : get(1);
+    const sku       = iSku>=0       ? get(iSku)       : get(2);
+    const imagen    = iImagen>=0    ? get(iImagen)    : get(3);
+    const badgeRaw  = iBadge>=0     ? get(iBadge)     : get(4);
+    const id        = iId>=0        ? get(iId)        : ('L'+(ri));
+    const desc      = iDesc>=0      ? get(iDesc)      : get(6);
+    if(!nombre) continue;
+    products.push({
+      nombre,
+      categoria: normCat(catRaw),
+      sku,
+      imagen,
+      badge: normBadge(badgeRaw),
+      id: id||('L'+ri),
+      descripcion: desc
+    });
+  }
+  console.log('[TSZ] Parsed', products.length, 'products');
+  return products;
 }
 
 function renderProducts(prods){
