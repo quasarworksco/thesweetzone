@@ -749,6 +749,7 @@ function doLogin(){
   const u = document.getElementById('loginUser').value.trim();
   const p = document.getElementById('loginPass').value;
   if(u===CREDENTIALS.user && p===CREDENTIALS.pass){
+    localStorage.setItem('tsz_session','1');
     document.getElementById('loginScreen').classList.add('hide');
     loadFromStorage();
     toast('Bienvenido, '+u+'!','success');
@@ -762,6 +763,7 @@ function doLogin(){
 }
 
 function logout(){
+  localStorage.removeItem('tsz_session');
   document.getElementById('loginScreen').classList.remove('hide');
   document.getElementById('loginUser').value='';
   document.getElementById('loginPass').value='';
