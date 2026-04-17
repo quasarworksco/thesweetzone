@@ -108,6 +108,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--B);color:var(--W2);min-he
 .prow{display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden}
 .pname{font-weight:600;font-size:.82rem;color:var(--W2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .psku{font-family:'Space Mono',monospace;font-size:.6rem;color:#3a3640}
+.pdesc-snip{font-size:.65rem;color:#555;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
 .cc{font-size:.57rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px;white-space:nowrap;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .c0{background:rgba(200,39,45,.15);color:var(--R2);border:1px solid rgba(200,39,45,.25)}
 .c1{background:rgba(26,138,58,.12);color:#22aa4a;border:1px solid rgba(26,138,58,.2)}
@@ -316,6 +317,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--B);color:var(--W2);min-he
 <option value="hot">HOT</option>
 <option value="sale">OFERTA</option>
 </select></div>
+<div class="ff s2"><label>Descripcion del Producto <span style="font-size:.55rem;color:var(--W3);text-transform:none;letter-spacing:0;font-weight:400">— aparece en el card al hacer clic</span></label><textarea id="FDESC" placeholder="Ej: Gotas bronceadoras de alta duracion, formula ligera, apta para todo tipo de piel..." style="min-height:80px;resize:vertical;background:#111;border:1px solid #222;border-bottom:2px solid #222;padding:10px 12px;color:var(--W2);font-family:'DM Sans',sans-serif;font-size:.83rem;border-radius:4px;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderBottomColor='var(--R)'" onblur="this.style.borderBottomColor='#222'"></textarea></div>
 <div class="ff"><label>Precio (fijo)</label><input type="text" value="$4.99" readonly/></div>
 </div>
 <input type="hidden" id="FX" value="-1"/>
@@ -486,15 +488,17 @@ function parseCSV(txt) {
     var catRaw    = iC >= 0 ? get(iC) : get(1);
     var sku       = iS >= 0 ? get(iS) : get(2);
     var imagen    = iI >= 0 ? get(iI) : get(3);
-    var badgeRaw  = iB >= 0 ? get(iB) : get(4);
-    var id        = iD >= 0 ? get(iD) : ('L' + (ri+1));
+    var badgeRaw    = iB >= 0 ? get(iB) : get(4);
+    var id          = iD >= 0 ? get(iD) : ('L' + (ri+1));
+    var descripcion = get(6); // columna G
     return {
       nombre: nombre,
       categoria: normCat(catRaw),
       sku: sku,
       imagen: imagen,
       badge: normBadge(badgeRaw),
-      id: id || ('L' + (ri+1))
+      id: id || ('L' + (ri+1)),
+      descripcion: descripcion
     };
   }).filter(function(p){ return (p.nombre||'').trim(); });
 }
@@ -640,9 +644,10 @@ function saveProd() {
   var categoria = document.getElementById('FC').value;
   var sku       = document.getElementById('FS').value.trim();
   var imagen    = document.getElementById('FI').value.trim();
-  var badge     = document.getElementById('FB').value;
-  var idx       = parseInt(document.getElementById('FX').value);
-  var id        = document.getElementById('FID').value;
+  var badge       = document.getElementById('FB').value;
+  var descripcion = document.getElementById('FDESC').value.trim();
+  var idx         = parseInt(document.getElementById('FX').value);
+  var id          = document.getElementById('FID').value;
 
   if (!nombre)    { toast('Nombre requerido','e'); shk('FN'); return; }
   if (!categoria) { toast('Categoria requerida','e'); shk('FC'); return; }
@@ -658,7 +663,7 @@ function saveProd() {
     document.getElementById('FS').value = sku;
   }
 
-  var prod = {nombre:nombre, categoria:categoria, sku:sku, imagen:imagen, badge:badge};
+  var prod = {nombre:nombre, categoria:categoria, sku:sku, imagen:imagen, badge:badge, descripcion:descripcion};
   var btn = document.getElementById('BSV');
   btn.disabled = true;
   btn.innerHTML = '<div class="spin"></div> Guardando...';
@@ -762,7 +767,7 @@ function renderTbl() {
     rows += '<tr>';
     rows += '<td><div class="prow">';
     rows += '<img class="pthumb" src="'+img+'" alt="" loading="lazy" onerror="this.style.opacity=0.1"/>';
-    rows += '<div><div class="pname">'+(p.nombre||'-')+'</div><div class="psku">'+(p.sku||'-')+'</div></div>';
+    rows += '<div><div class="pname">'+(p.nombre||'-')+'</div><div class="psku">'+(p.sku||'-')+'</div>'+(p.descripcion?'<div class="pdesc-snip">'+p.descripcion.substring(0,60)+(p.descripcion.length>60?'…':'')+'</div>':'')+'</div>';
     rows += '</div></td>';
     rows += '<td><span class="cc '+cc+'">'+(p.categoria||'-')+'</span></td>';
     rows += '<td><span style="font-family:monospace;font-size:.68rem;color:var(--W3)">'+(p.sku||'-')+'</span></td>';
