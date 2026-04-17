@@ -424,14 +424,12 @@ function parseCSV(txt) {
   if (!ln.length) return [];
 
   function splitLine(line) {
-    // Remove carriage return
     line = line.replace(/\r/g, '');
     var r = [], cur = '', inQ = false;
     for (var i = 0; i < line.length; i++) {
       var c = line[i];
       if (c === '"') {
-        // Handle escaped double quotes ""
-        if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+        if (inQ && line[i+1] === '"') { cur += '"'; i++; } // escaped quote ""
         else { inQ = !inQ; }
       } else if (c === ',' && !inQ) {
         r.push(cur.trim());
@@ -456,12 +454,13 @@ function parseCSV(txt) {
     return -1;
   }
 
-  var iN = ci(['nombre','name','producto','product','title']);
-  var iC = ci(['categoria','category','cat','tipo','type']);
-  var iS = ci(['sku','code','codigo','ref']);
-  var iI = ci(['imagen','image','img','foto','photo','url','link']);
-  var iB = ci(['badge','etiqueta','tag','label']);
-  var iD = ci(['id']);
+  var iN    = ci(['nombre','name','producto','product','title']);
+  var iC    = ci(['categoria','category','cat','tipo','type']);
+  var iS    = ci(['sku','code','codigo','ref']);
+  var iI    = ci(['imagen','image','img','foto','photo','url','link']);
+  var iB    = ci(['badge','etiqueta','tag','label']);
+  var iD    = ci(['id']);
+  var iDesc = ci(['descripcion','description','desc','detalle','detail']);
 
   function normCat(v) {
     var s = (v||'').toLowerCase();
@@ -484,20 +483,21 @@ function parseCSV(txt) {
   return ln.slice(1).map(function(line, ri) {
     var v = splitLine(line);
     function get(i) { return i >= 0 ? (v[i]||'').replace(/["\r]/g,'').trim() : ''; }
-    var nombre    = iN >= 0 ? get(iN) : get(0);
-    var catRaw    = iC >= 0 ? get(iC) : get(1);
-    var sku       = iS >= 0 ? get(iS) : get(2);
-    var imagen    = iI >= 0 ? get(iI) : get(3);
-    var badgeRaw    = iB >= 0 ? get(iB) : get(4);
-    var id          = iD >= 0 ? get(iD) : ('L' + (ri+1));
-    var descripcion = get(6); // columna G
+    var nombre      = iN    >= 0 ? get(iN)    : get(0);
+    var catRaw      = iC    >= 0 ? get(iC)    : get(1);
+    var sku         = iS    >= 0 ? get(iS)    : get(2);
+    var imagen      = iI    >= 0 ? get(iI)    : get(3);
+    var badgeRaw    = iB    >= 0 ? get(iB)    : get(4);
+    var id          = iD    >= 0 ? get(iD)    : ('L' + (ri+1));
+    // Descripcion: use header index if found, else col G (index 6) only if headers exist there
+    var descripcion = iDesc >= 0 ? get(iDesc) : (v.length > 6 ? get(6) : '');
     return {
-      nombre: nombre,
-      categoria: normCat(catRaw),
-      sku: sku,
-      imagen: imagen,
-      badge: normBadge(badgeRaw),
-      id: id || ('L' + (ri+1)),
+      nombre:      nombre,
+      categoria:   normCat(catRaw),
+      sku:         sku,
+      imagen:      imagen,
+      badge:       normBadge(badgeRaw),
+      id:          id || ('L' + (ri+1)),
       descripcion: descripcion
     };
   }).filter(function(p){ return (p.nombre||'').trim(); });
@@ -624,6 +624,9 @@ function openM(idx) {
   document.getElementById('FI').value = img;
   document.getElementById('IH').textContent = '';
   showPrev(img);
+
+  // Descripcion
+  document.getElementById('FDESC').value = p.descripcion || p.description || p.desc || '';
 
   // SKU
   document.getElementById('FS').value = isE ? (p.sku || '') : (catSet ? genSku(catSet, -1) : '');
@@ -767,7 +770,8 @@ function renderTbl() {
     rows += '<tr>';
     rows += '<td><div class="prow">';
     rows += '<img class="pthumb" src="'+img+'" alt="" loading="lazy" onerror="this.style.opacity=0.1"/>';
-    rows += '<div><div class="pname">'+(p.nombre||'-')+'</div><div class="psku">'+(p.sku||'-')+'</div>'+(p.descripcion?'<div class="pdesc-snip">'+p.descripcion.substring(0,60)+(p.descripcion.length>60?'…':'')+'</div>':'')+'</div>';
+    var dsnip = p.descripcion ? '<div class="pdesc-snip">'+(p.descripcion.substring(0,55))+(p.descripcion.length>55?'…':'')+'</div>' : '';
+    rows += '<div><div class="pname">'+(p.nombre||'-')+'</div><div class="psku">'+(p.sku||'-')+'</div>'+dsnip+'</div>';
     rows += '</div></td>';
     rows += '<td><span class="cc '+cc+'">'+(p.categoria||'-')+'</span></td>';
     rows += '<td><span style="font-family:monospace;font-size:.68rem;color:var(--W3)">'+(p.sku||'-')+'</span></td>';
