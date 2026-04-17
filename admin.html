@@ -664,8 +664,14 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
         </select>
       </div>
       <div class="ff">
-        <label>SKU / Código</label>
-        <input type="text" id="fSku" placeholder="Ej: TSZ-001"/>
+        <label>SKU / Código <span style="font-size:.58rem;color:var(--W3);font-weight:400;letter-spacing:0;text-transform:none;margin-left:6px">— generado automáticamente</span></label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="text" id="fSku" readonly style="flex:1;opacity:.75;cursor:not-allowed;font-family:'Space Mono',monospace;font-size:.82rem;background:var(--B4)"/>
+          <button type="button" onclick="regenSku()" title="Regenerar SKU" style="width:36px;height:36px;background:var(--B4);border:1px solid var(--B5);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s" onmouseover="this.style.background='var(--R3)'" onmouseout="this.style.background='var(--B4)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(242,238,248,.5)"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          </button>
+        </div>
+        <span id="skuDuplicateWarn" style="font-size:.68rem;color:var(--R2);display:none">⚠ Este SKU ya existe — se regeneró automáticamente</span>
       </div>
       <div class="ff sp2">
         <label>URL de Imagen *</label>
@@ -867,13 +873,20 @@ async function connectSheet(){
 function parseCSV(text){
   const lines = text.trim().split('\n').filter(l=>l.trim());
   if(!lines.length) return [];
-  const headers = lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/["\r]/g,''));
-  return lines.slice(1).map(line=>{
-    const vals = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || line.split(',');
+  // normalize headers: lowercase, remove colons, trim, remove quotes and \r
+  const headers = lines[0].split(',').map(h=>
+    h.replace(/["\r]/g,'').trim().toLowerCase().replace(/:/g,'').trim()
+  );
+  return lines.slice(1).map((line, rowIdx)=>{
+    const vals = line.split(',').map(v=>(v||'').replace(/["\r]/g,'').trim());
     const obj={};
-    headers.forEach((h,i)=> obj[h]=(vals[i]||'').replace(/["\r]/g,'').trim());
+    headers.forEach((h,i)=> obj[h] = vals[i]||'');
+    // Normalize: support 'name' as fallback for 'nombre'
+    if(!obj.nombre && obj.name) obj.nombre = obj.name;
+    // Generate a local ID if none exists
+    if(!obj.id) obj.id = 'LOCAL-'+(rowIdx+1)+'-'+Date.now();
     return obj;
-  }).filter(p=>(p.nombre||p.name||'').trim());
+  }).filter(p=>(p.nombre||'').trim());
 }
 
 function updateSheetStatus(live, msg){
@@ -1000,9 +1013,15 @@ function openModal(idx=-1){
   const p = isEdit ? products[idx] : {};
   document.getElementById('fNombre').value  = p.nombre||'';
   document.getElementById('fCategoria').value = p.categoria||'';
-  document.getElementById('fSku').value     = p.sku||'';
   document.getElementById('fImagen').value  = p.imagen||'';
   document.getElementById('fBadge').value   = p.badge||'';
+  document.getElementById('skuDuplicateWarn').style.display='none';
+  // For new products auto-gen SKU; for edits keep existing
+  if(isEdit){
+    document.getElementById('fSku').value = p.sku||'';
+  } else {
+    document.getElementById('fSku').value = p.categoria ? generateSku(-1) : '';
+  }
   previewImg(p.imagen||'');
   document.getElementById('modalVeil').classList.add('open');
   document.getElementById('prodModal').classList.add('open');
@@ -1019,7 +1038,7 @@ function editProduct(idx){ openModal(idx); showPage('products',document.querySel
 function saveProduct(){
   const nombre = document.getElementById('fNombre').value.trim();
   const categoria = document.getElementById('fCategoria').value;
-  const sku = document.getElementById('fSku').value.trim();
+  let sku = document.getElementById('fSku').value.trim();
   const imagen = document.getElementById('fImagen').value.trim();
   const badge = document.getElementById('fBadge').value;
   const idx = parseInt(document.getElementById('fIndex').value);
@@ -1027,6 +1046,23 @@ function saveProduct(){
   if(!nombre){ toast('El nombre es requerido','error'); shakeInput('fNombre'); return; }
   if(!categoria){ toast('Selecciona una categoría','error'); shakeInput('fCategoria'); return; }
   if(!imagen){ toast('La URL de imagen es requerida','error'); shakeInput('fImagen'); return; }
+
+  // Check duplicate name
+  if(checkDuplicateName(nombre, idx)){
+    toast('⚠ Ya existe un producto con ese nombre','error');
+    shakeInput('fNombre');
+    return;
+  }
+
+  // Ensure SKU exists and is unique
+  if(!sku) sku = generateSku(categoria, idx);
+  const skuDupe = products.some((p,i)=> i!==idx && p.sku===sku);
+  if(skuDupe){
+    sku = generateSku(categoria, idx);
+    document.getElementById('fSku').value = sku;
+    document.getElementById('skuDuplicateWarn').style.display='block';
+    setTimeout(()=>document.getElementById('skuDuplicateWarn').style.display='none',3000);
+  }
 
   const prod = { nombre, categoria, sku, imagen, badge };
   if(idx>=0){
@@ -1100,6 +1136,88 @@ function doDelete(){
 document.getElementById('modalVeil').addEventListener('click', closeModal);
 document.getElementById('confirmVeil').addEventListener('click', closeConfirm);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeModal(); closeConfirm(); } });
+
+/* ══════════════════════════════════
+   AUTO SKU + DUPLICATE CHECK
+══════════════════════════════════ */
+const CAT_PREFIX = {
+  'Sweet Zone':      'TSZ',
+  'Salud y Belleza': 'SB',
+  'Maquillaje':      'MQ',
+};
+
+function generateSku(categoria, editingIdx){
+  if(editingIdx===undefined||editingIdx===null) editingIdx=-1;
+  const prefix = CAT_PREFIX[categoria] || 'PRD';
+  const existing = products
+    .filter(function(_,i){ return i!==editingIdx; })
+    .map(function(p){ return p.sku||''; })
+    .filter(function(s){ return s.startsWith(prefix+'-'); });
+  const nums = existing.map(function(s){
+    const m = s.match(/(\d+)$/); return m?parseInt(m[1]):0;
+  });
+  let next = nums.length ? Math.max.apply(null,nums)+1 : 1;
+  let sku = prefix+'-'+String(next).padStart(3,'0');
+  while(products.some(function(p,i){ return i!==editingIdx && p.sku===sku; })){
+    next++; sku = prefix+'-'+String(next).padStart(3,'0');
+  }
+  return sku;
+}
+
+function regenSku(){
+  const cat = document.getElementById('fCategoria').value;
+  const idx = parseInt(document.getElementById('fIndex').value);
+  if(!cat){ toast('Selecciona una categoría primero','error'); return; }
+  document.getElementById('fSku').value = generateSku(cat, idx);
+  document.getElementById('skuDuplicateWarn').style.display='none';
+}
+
+document.getElementById('fCategoria').addEventListener('change', function(){
+  const idx = parseInt(document.getElementById('fIndex').value);
+  if(idx<0 || !document.getElementById('fSku').value) regenSku();
+});
+
+function checkDuplicateName(nombre, editingIdx){
+  if(!nombre) return false;
+  return products.some(function(p,i){
+    return i!==editingIdx && (p.nombre||'').trim().toLowerCase()===nombre.trim().toLowerCase();
+  });
+}
+
+/* ══════════════════════════════════
+   WEB APP SYNC
+══════════════════════════════════ */
+async function syncToSheet(action, product, id){
+  try{
+    const body = { action, product, id };
+    // Google Apps Script requires no-cors from browser
+    fetch(WEB_APP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(body),
+    });
+    // Re-fetch CSV after a short delay to reflect the change
+    setTimeout(async ()=>{ await fetchAndSync(); }, 2200);
+  } catch(e){
+    toast('Error al sincronizar: '+e.message,'error');
+  }
+}
+
+async function manualSync(){
+  toast('Sincronizando con Google Sheet…','info');
+  await fetchAndSync();
+}
+
+/* ══════════════════════════════════
+   SESSION PERSIST
+══════════════════════════════════ */
+(function(){
+  if(localStorage.getItem('tsz_session')==='1'){
+    document.getElementById('loginScreen').classList.add('hide');
+    loadFromStorage();
+  }
+})();
 
 /* ══════════════════════════════════
    TOAST
