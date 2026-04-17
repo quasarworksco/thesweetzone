@@ -716,18 +716,37 @@ function doDel() {
   if (delIdx < 0) return;
   var p = prods[delIdx];
   var pid = p.id || '';
+  var psku = p.sku || '';
+  var pnombre = p.nombre || '';
   prods.splice(delIdx, 1);
   save();
   closeC();
   renderTbl();
   renderDash();
-  toast('"' + p.nombre + '" eliminado','i');
+  toast('"' + pnombre + '" eliminado localmente','i');
+
+  // Try delete by ID first, then by SKU as fallback
   if (pid && pid.indexOf('L') !== 0) {
+    // Has real sheet ID
     callWA({action:'delete', id:pid}, function(r){
-      if (r.ok) toast('Eliminado del Sheet','s');
+      if (r.ok) { toast('Eliminado del Sheet ✓','s'); setTimeout(fetchCSV, 2000); }
+      else { toast('Error al eliminar del Sheet: ' + (r.error||''), 'e'); }
     });
+  } else if (psku) {
+    // Fallback: delete by SKU
+    callWA({action:'deleteBySku', sku:psku}, function(r){
+      if (r.ok) { toast('Eliminado del Sheet ✓','s'); setTimeout(fetchCSV, 2000); }
+      else {
+        // Last fallback: delete by name
+        callWA({action:'deleteByName', nombre:pnombre}, function(r2){
+          if (r2.ok) { toast('Eliminado del Sheet ✓','s'); setTimeout(fetchCSV, 2000); }
+          else { toast('Eliminado local. Bórralo manualmente del Sheet.','i'); }
+        });
+      }
+    });
+  } else {
+    toast('Eliminado local. Sin ID — bórralo manualmente del Sheet.','i');
   }
-  setTimeout(fetchCSV, 3500);
   delIdx = -1;
 }
 
