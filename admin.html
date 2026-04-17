@@ -570,10 +570,13 @@ async function manualSync(){
    Uses fetch with redirect following (GAS returns 302→200)
 ════════════════════════════════════════ */
 async function callWA(params){
-  const url = WA + '?' + new URLSearchParams(params).toString();
   try{
-    // GAS redirects — fetch follows redirects by default
-    const res  = await fetch(url, { redirect:'follow' });
+    const res = await fetch(WA, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(params)
+    });
     const text = await res.text();
     let data;
     try{ data = JSON.parse(text); }
@@ -823,9 +826,8 @@ async function saveProd(){
   btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4z"/></svg>Guardar';
   closeModal();
   renderTbl(); renderDash();
-
-  // Re-sync after 3s to confirm sheet state
-  setTimeout(()=>fetchCSV(), 3000);
+  // NOTE: NO auto-fetchCSV here — el CSV de Sheets tarda 1-5 min en actualizarse
+  // Los datos locales son la fuente de verdad. Sync manual con el botón de sincronizar.
 }
 
 /* ════════════════════════════════════════
@@ -861,7 +863,7 @@ async function doDel(){
     if(res.ok) toast('Eliminado del Sheet ✓','s');
     else toast('Advertencia Sheet: '+(res.error||'revisar'),'i');
   }
-  setTimeout(()=>fetchCSV(), 3000);
+  // NO auto-fetchCSV — el CSV tarda 1-5 min en actualizarse
 }
 
 document.getElementById('mVeil').addEventListener('click',closeModal);
