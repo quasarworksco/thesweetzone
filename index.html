@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>The Sweet Zone — Lo que buscas, al precio que necesitas.</title>
+<title>The Sweet Zone | Precios para Emprendedores · buythesweetzone.com</title>
 <meta name="description" content="Productos de calidad para uso personal o reventa. Maquillaje, Salud &amp; Belleza desde $4.99. Mayoreo 200+ unidades a $3.99."/>
 <meta name="keywords" content="The Sweet Zone, tienda online, salud y belleza, maquillaje, cosméticos, mayoreo"/>
 <meta name="author" content="The Sweet Zone"/>
 <meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://www.thesweetzone.com/"/>
+<link rel="canonical" href="https://buythesweetzone.com/"/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://quasarworksco.github.io/thesweetzone/"/>
-<meta property="og:title" content="The Sweet Zone — Lo que buscas, al precio que necesitas."/>
+<meta property="og:url" content="https://buythesweetzone.com/"/>
+<meta property="og:title" content="The Sweet Zone — Precios para Emprendedores"/>
 <meta property="og:description" content="Productos de calidad para uso personal o reventa. Maquillaje, Salud &amp; Belleza desde $4.99 · Mayoreo 200+ uds a $3.99."/>
-<meta property="og:image" content="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&auto=format&fit=crop&q=85"/>
+<meta property="og:image" content="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop&q=85"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta property="og:image:alt" content="The Sweet Zone — Maquillaje, Salud y Belleza"/>
@@ -21,10 +21,10 @@
 <meta property="og:site_name" content="The Sweet Zone"/>
 <meta property="og:locale" content="es_US"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="The Sweet Zone — Lo que buscas, al precio que necesitas."/>
+<meta name="twitter:title" content="The Sweet Zone — Precios para Emprendedores"/>
 <meta name="twitter:description" content="Maquillaje, Salud &amp; Belleza y más. $4.99 por unidad · Mayoreo 200+ uds a $3.99."/>
-<meta name="twitter:image" content="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&auto=format&fit=crop&q=85"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"The Sweet Zone","description":"Productos de calidad para uso personal o reventa. Maquillaje, Salud y Belleza desde $4.99. Mayoreo 200+ unidades a $3.99.","url":"https://quasarworksco.github.io/thesweetzone/","image":"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&auto=format&fit=crop","priceRange":"$","currenciesAccepted":"USD","telephone":"+17864195886"}</script>
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop&q=85"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"The Sweet Zone","description":"Productos de calidad para uso personal o reventa. Maquillaje, Salud y Belleza desde $4.99. Mayoreo 200+ unidades a $3.99.","url":"https://buythesweetzone.com/","image":"https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop","priceRange":"$","currenciesAccepted":"USD","telephone":"+17864195886"}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Outfit:wght@300;400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
@@ -566,7 +566,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 /* ═══════════════════════════════════════
    PRODUCTS
 ═══════════════════════════════════════ */
-.prod-section{padding:88px var(--pad);background:var(--B2)}
+.prod-section{padding:88px var(--pad);background:#000}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:44px;margin-bottom:40px}
 .flt{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:9px 20px;background:var(--B4);border:1px solid var(--B5);color:var(--W3);cursor:pointer;border-radius:20px;transition:all .25s var(--ease)}
 .flt.on,.flt:hover{background:var(--R3);border-color:var(--R);color:var(--W)}
@@ -844,6 +844,51 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 @media(max-width:900px){.reseller-inner{grid-template-columns:1fr;gap:48px}}
 @media(max-width:560px){.reseller-section{padding:72px 20px}}
 
+
+/* ═══ PRODUCT DETAIL MODAL ═══ */
+.pd-veil{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px)}
+.pd-veil.open{opacity:1;pointer-events:all}
+.pd-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(860px,96vw);max-height:92vh;overflow-y:auto;background:#0a0a0a;border:1px solid #1a1a1a;border-top:2px solid var(--R);border-radius:10px;z-index:601;opacity:0;pointer-events:none;transition:all .38s var(--ease)}
+.pd-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all}
+.pd-modal::-webkit-scrollbar{width:3px}.pd-modal::-webkit-scrollbar-thumb{background:var(--R3)}
+.pd-close{position:absolute;top:14px;right:14px;background:#111;border:1px solid #222;width:38px;height:38px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1}
+.pd-close:hover{background:var(--R);border-color:var(--R)}.pd-close svg{width:18px;height:18px;fill:#fff}
+.pd-body{display:grid;grid-template-columns:1fr 1fr;min-height:480px}
+.pd-img-col{background:#111;position:relative;overflow:hidden}
+.pd-img-wrap{position:relative;height:100%;min-height:380px}
+.pd-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
+.pd-modal:hover .pd-img-wrap img{transform:scale(1.04)}
+.pd-badge-wrap{position:absolute;top:14px;left:14px}
+.pd-info-col{padding:36px 32px;display:flex;flex-direction:column;gap:0}
+.pd-cat{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:10px}
+.pd-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:8px}
+.pd-sku{font-family:'Space Mono',monospace;font-size:.65rem;color:#444;margin-bottom:16px}
+.pd-desc{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:22px;border-left:2px solid #1a1a1a;padding-left:14px;flex:1}
+.pd-desc:empty{display:none}
+.pd-prices{display:flex;gap:0;border:1px solid #1a1a1a;border-radius:6px;overflow:hidden;margin-bottom:22px}
+.pd-price-block{flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.pd-price-block.bulk{background:rgba(200,39,45,.06);border-left:1px solid #1a1a1a}
+.pd-price-lbl{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.pd-price-val{font-family:'Space Mono',monospace;font-size:1.2rem;font-weight:700;color:#fff}
+.pd-price-sep{width:1px;background:#1a1a1a}
+.pd-qty-section{margin-bottom:14px}
+.pd-qty-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
+.pd-qty-row{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.pd-qbtn{width:34px;height:34px;background:#111;border:1px solid #222;border-radius:4px;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.pd-qbtn:hover{background:var(--R);border-color:var(--R)}
+.pd-qty-n{font-family:'Space Mono',monospace;font-size:1.1rem;color:#fff;font-weight:700;min-width:40px;text-align:center}
+.pd-presets{display:flex;gap:6px;flex-wrap:wrap}
+.pd-presets button{padding:6px 12px;background:#111;border:1px solid #1a1a1a;border-radius:4px;color:rgba(255,255,255,.5);font-size:.7rem;cursor:pointer;transition:all .2s}
+.pd-presets button:hover{background:var(--R);border-color:var(--R);color:#fff}
+.pd-presets button span{color:var(--R2);font-size:.62rem}
+.pd-subtotal{font-size:.84rem;color:rgba(255,255,255,.5);margin-bottom:16px}
+.pd-subtotal strong{color:#fff;font-family:'Space Mono',monospace}
+.pd-add-btn{width:100%;padding:14px;background:var(--R);color:#fff;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.pd-add-btn:hover{background:var(--R2);transform:translateY(-2px)}
+.pd-add-btn svg{width:16px;height:16px;fill:#fff}
+.p-card{cursor:pointer}
+@media(max-width:680px){.pd-body{grid-template-columns:1fr}.pd-img-wrap{min-height:240px}.pd-info-col{padding:22px 18px}}
+
 </style>
 </head>
 <body>
@@ -917,7 +962,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 
   <!-- BACKGROUND IMAGE -->
   <div class="hero-bg">
-    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1800&auto=format&fit=crop&q=90" alt="The Sweet Zone"/>
+    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1800&auto=format&fit=crop&q=90" alt="The Sweet Zone"/>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -927,7 +972,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     <h1 class="hero-h1">
       <span class="line"><span class="line-inner">Calidad real.</span></span>
       <span class="line"><span class="line-inner">Precios que</span></span>
-      <span class="line"><span class="line-inner">funcionan.</span></span>
+      <span class="line"><span class="line-inner">para emprendedores.</span></span>
     </h1>
 
     <p class="hero-p">Maquillaje, Salud &amp; Belleza a $4.99 la unidad. Precio especial de mayoreo desde 200 unidades para revendedores.</p>
@@ -1009,9 +1054,9 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
       </div>
     </div>
     <div class="tsz-right reveal fr d1">
-      <div class="tsz-img"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&auto=format&fit=crop" alt=""/></div>
-      <div class="tsz-img"><img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&auto=format&fit=crop" alt=""/></div>
-      <div class="tsz-img"><img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&auto=format&fit=crop" alt=""/></div>
+      <div class="tsz-img"><img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600&auto=format&fit=crop" alt=""/></div>
+      <div class="tsz-img"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&auto=format&fit=crop" alt=""/></div>
+      <div class="tsz-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop" alt=""/></div>
     </div>
   </div>
   <div class="wholesale-banner reveal d2">
@@ -1035,19 +1080,19 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   <h2 class="sec-h reveal d1">Nuestras <em>Categorías</em></h2>
   <div class="cat-grid">
     <a class="cat-card reveal d1" href="#products" onclick="filterP('Sweet Zone',null)">
-      <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=700&auto=format&fit=crop" alt="The Sweet Zone"/>
+      <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=700&auto=format&fit=crop" alt="The Sweet Zone"/>
       <div class="cat-ov"></div>
       <div class="cat-body"><div class="cat-pill">Explorar</div><div class="cat-name">The Sweet Zone</div></div>
       <div class="cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
     </a>
     <a class="cat-card reveal d2" href="#products" onclick="filterP('Salud y Belleza',null)">
-      <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=700&auto=format&fit=crop" alt="Salud y Belleza"/>
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=700&auto=format&fit=crop" alt="Salud y Belleza"/>
       <div class="cat-ov"></div>
       <div class="cat-body"><div class="cat-pill">Explorar</div><div class="cat-name">Salud y Belleza</div></div>
       <div class="cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
     </a>
     <a class="cat-card reveal d3" href="#products" onclick="filterP('Maquillaje',null)">
-      <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=700&auto=format&fit=crop" alt="Maquillaje y Cosméticos"/>
+      <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=700&auto=format&fit=crop" alt="Maquillaje y Cosméticos"/>
       <div class="cat-ov"></div>
       <div class="cat-body"><div class="cat-pill">Explorar</div><div class="cat-name">Maquillaje &amp; Cosméticos</div></div>
       <div class="cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
@@ -1060,7 +1105,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 ════════════════════════════ -->
 <section class="prod-section" id="products">
   <div class="sec-label reveal fl">Catálogo</div>
-  <h2 class="sec-h reveal d1">Productos <em>Destacados</em></h2>
+  <h2 class="sec-h reveal d1" style="margin-bottom:32px">Productos <em>Destacados</em></h2>
   <div class="prod-search-wrap reveal d1">
     <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
     <input type="text" id="prodSearchInp" placeholder="Buscar productos por nombre o categoría…" oninput="searchProds(this.value)"/>
@@ -1169,9 +1214,9 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 <section class="about-section" id="about">
   <div class="reveal fl">
     <div class="about-imgs">
-      <div class="a-img"><img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=600&auto=format&fit=crop" alt=""/></div>
-      <div class="a-img"><img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&auto=format&fit=crop" alt=""/></div>
-      <div class="a-img"><img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&auto=format&fit=crop" alt=""/></div>
+      <div class="a-img"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&auto=format&fit=crop" alt=""/></div>
+      <div class="a-img"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&auto=format&fit=crop" alt=""/></div>
+      <div class="a-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop" alt=""/></div>
     </div>
   </div>
   <div class="about-text reveal fr">
@@ -1180,11 +1225,12 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     <p>The Sweet Zone nació para ser el aliado de quienes cuidan de sí mismos — y de quienes construyen un negocio. Seleccionamos cada producto con criterio: calidad garantizada, precios reales y trato directo.</p>
     <a href="#contact" class="btn-prim">Contáctanos <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></a>
     <div class="about-nums">
-      <div class="a-num"><div class="n">$4.99</div><div class="l">Por unidad</div></div>
       <div class="a-num"><div class="n">3</div><div class="l">Categorías</div></div>
-      <div class="a-num"><div class="n">$4.99</div><div class="l">Por unidad</div></div>
-      <div class="a-num"><div class="n">200+</div><div class="l">Uds para mayoreo</div></div>
+      <div class="a-num"><div class="n">$4.99</div><div class="l">Precio unitario</div></div>
+      <div class="a-num"><div class="n">$3.99</div><div class="l">Mayoreo 200+</div></div>
+      <div class="a-num"><div class="n">24h</div><div class="l">Respuesta WhatsApp</div></div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -1481,16 +1527,16 @@ function showToast(msg){document.getElementById('toastTxt').textContent=msg;toas
 ══════════════════════════ */
 let allProducts=[];
 const DEMO=[
-  {nombre:'Producto Sweet Zone #1',categoria:'Sweet Zone',sku:'TSZ-001',imagen:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&auto=format&fit=crop',badge:'new'},
-  {nombre:'Producto Sweet Zone #2',categoria:'Sweet Zone',sku:'TSZ-002',imagen:'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=400&auto=format&fit=crop',badge:'hot'},
+  {nombre:'Producto Sweet Zone #1',categoria:'Sweet Zone',sku:'TSZ-001',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:'new'},
+  {nombre:'Producto Sweet Zone #2',categoria:'Sweet Zone',sku:'TSZ-002',imagen:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&auto=format&fit=crop',badge:'hot'},
   {nombre:'Producto Sweet Zone #3',categoria:'Sweet Zone',sku:'TSZ-003',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:''},
-  {nombre:'Producto Sweet Zone #4',categoria:'Sweet Zone',sku:'TSZ-004',imagen:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&auto=format&fit=crop',badge:'sale'},
-  {nombre:'Crema Hidratante Facial',categoria:'Salud y Belleza',sku:'SB-001',imagen:'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&auto=format&fit=crop',badge:'new'},
+  {nombre:'Producto Sweet Zone #4',categoria:'Sweet Zone',sku:'TSZ-004',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:'sale'},
+  {nombre:'Crema Hidratante Facial',categoria:'Salud y Belleza',sku:'SB-001',imagen:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&auto=format&fit=crop',badge:'new'},
   {nombre:'Sérum Vitamina C',categoria:'Salud y Belleza',sku:'SB-002',imagen:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&auto=format&fit=crop',badge:'hot'},
   {nombre:'Aceite Corporal',categoria:'Salud y Belleza',sku:'SB-003',imagen:'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&auto=format&fit=crop',badge:''},
   {nombre:'Set Cuidado Facial',categoria:'Salud y Belleza',sku:'SB-004',imagen:'https://images.unsplash.com/photo-1526045431048-f857369baa09?w=400&auto=format&fit=crop',badge:'sale'},
-  {nombre:'Paleta de Sombras',categoria:'Maquillaje',sku:'MQ-001',imagen:'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&auto=format&fit=crop',badge:'hot'},
-  {nombre:'Labial Líquido Matte',categoria:'Maquillaje',sku:'MQ-002',imagen:'https://images.unsplash.com/photo-1586495777744-4e6232bf1b4d?w=400&auto=format&fit=crop',badge:'new'},
+  {nombre:'Paleta de Sombras',categoria:'Maquillaje',sku:'MQ-001',imagen:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop',badge:'hot'},
+  {nombre:'Labial Líquido Matte',categoria:'Maquillaje',sku:'MQ-002',imagen:'https://images.unsplash.com/photo-1600428853876-fb5522a5d0d5?w=400&auto=format&fit=crop',badge:'new'},
   {nombre:'Base Full Coverage',categoria:'Maquillaje',sku:'MQ-003',imagen:'https://images.unsplash.com/photo-1631214524020-3c69a4a6f5f4?w=400&auto=format&fit=crop',badge:''},
   {nombre:'Set de Brochas x12',categoria:'Maquillaje',sku:'MQ-004',imagen:'https://images.unsplash.com/photo-1643185540687-38d1f33b5e85?w=400&auto=format&fit=crop',badge:'sale'},
 ];
@@ -1543,6 +1589,10 @@ function parseCSV(txt){
     const o={};headers.forEach((h,i)=>o[h]=(vals[i]||'').replace(/"/g,'').trim());
     if(!o.nombre&&o.name)o.nombre=o.name;
     if(!o.id)o.id='L'+(ri+1);
+    // Column G = descripcion (index 6 if no header match)
+    if(!o.descripcion&&!o.description&&!o.desc&&vals[6]) o.descripcion=vals[6].replace(/"/g,'').trim();
+    if(!o.descripcion&&o.description)o.descripcion=o.description;
+    if(!o.descripcion&&o.desc)o.descripcion=o.desc;
     return o;
   }).filter(p=>(p.nombre||'').trim());
 }
@@ -1559,10 +1609,10 @@ function renderProducts(prods){
     const badge=(bv==='new'||bv==='hot'||bv==='sale')?'<div class="p-badge"><span class="badge badge-'+bv+'">'+bl+'</span></div>':'';
     const pData=JSON.stringify(p).replace(/'/g,"&#39;");
     const delay=(i%4)*.1;
-    return `<div class="p-card reveal ${delays[i%6]}" data-cat="${p.categoria}" data-name="${p.nombre}" style="animation-delay:${delay}s">
+    return `<div class="p-card reveal ${delays[i%6]}" data-cat="${p.categoria}" data-name="${p.nombre}" style="animation-delay:${delay}s" onclick="openPD(allProducts[i])">
       ${badge}
       <div class="p-img">
-        <img src="${p.imagen||'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&auto=format&fit=crop'}" alt="${p.nombre}" loading="lazy"/>
+        <img src="${p.imagen||'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=400&auto=format&fit=crop'}" alt="${p.nombre}" loading="lazy"/>
         <div class="p-quick-wrap">
           <button class="p-quick" onclick="openQV(${JSON.stringify(p).replace(/'/g,'&#39;').replace(/"/g,'&quot;')},event)">
             <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>Vista Rápida
@@ -1579,7 +1629,7 @@ function renderProducts(prods){
             <div class="bulk-p">200+ uds: $${CFG.P_BULK.toFixed(2)}</div>
           </div>
           <div style="position:relative">
-            <button class="p-add" onclick="togglePicker(this)" aria-label="Agregar"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+            <button class="p-add" onclick="togglePicker(this);event.stopPropagation()" aria-label="Agregar"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
             <div class="p-qty-picker" data-product='${pData}'>
               <button onclick="addQty(this,1)">× 1 unidad</button>
               <button onclick="addQty(this,100)">× 100 unidades</button>
@@ -1824,6 +1874,64 @@ function setCalc(field, val) {
 
 // Init calculator
 calcProfit();
+
+
+/* ══════════════════════════
+   PRODUCT DETAIL MODAL
+══════════════════════════ */
+var pdProd = null;
+var pdQtyVal = 1;
+
+function openPD(p){
+  if(!p) return;
+  pdProd = p; pdQtyVal = 1;
+  document.getElementById('pdImg').src = p.imagen || 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop';
+  document.getElementById('pdCat').textContent = p.categoria || '';
+  document.getElementById('pdName').textContent = p.nombre || '';
+  document.getElementById('pdSku').textContent = p.sku ? 'SKU: ' + p.sku : '';
+  var desc = p.descripcion || p.description || p.desc || '';
+  var descEl = document.getElementById('pdDesc');
+  if(descEl){ descEl.textContent = desc; descEl.style.display = desc ? 'block' : 'none'; }
+  document.getElementById('pdQtyN').textContent = 1;
+  pdUpdSub();
+  var bv = (p.badge||'').toLowerCase();
+  var bl = bv==='new'?'NUEVO':bv==='hot'?'HOT':bv==='sale'?'OFERTA':'';
+  document.getElementById('pdBadge').innerHTML = bl ? '<span class="badge badge-'+bv+'">'+bl+'</span>' : '';
+  document.getElementById('pdVeil').classList.add('open');
+  document.getElementById('pdModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePD(){
+  document.getElementById('pdVeil').classList.remove('open');
+  document.getElementById('pdModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function pdQty(d){
+  pdQtyVal = Math.max(1, pdQtyVal + d);
+  document.getElementById('pdQtyN').textContent = pdQtyVal;
+  pdUpdSub();
+}
+
+function pdSetQty(n){
+  pdQtyVal = n;
+  document.getElementById('pdQtyN').textContent = n;
+  pdUpdSub();
+}
+
+function pdUpdSub(){
+  var pe = pdQtyVal >= CFG.BULK_MIN ? CFG.P_BULK : CFG.P_UNIT;
+  var tot = (pdQtyVal * pe).toFixed(2);
+  var extra = pdQtyVal >= CFG.BULK_MIN ? ' <span style="font-size:.7rem;color:var(--R2)">(precio mayoreo)</span>' : '';
+  document.getElementById('pdSubtotal').innerHTML = 'Subtotal: <strong>$' + tot + '</strong>' + extra;
+}
+
+function pdAddToCart(){
+  if(!pdProd) return;
+  addToCart(pdProd, pdQtyVal);
+  closePD();
+}
 
 </script>
 <!-- FLOATING WHATSAPP -->
