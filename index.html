@@ -1328,6 +1328,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 ══════════════════════════ */
 const CFG = {
   WA: '17864195886',
+  WEB_APP: 'https://script.google.com/macros/s/AKfycbx_v0Xa_52i356iAGpcZRqRylTGOdYQIxqIZJgnHmZkYvGlyK9QOqDkvi48oGuaNeEMXw/exec',
   P_UNIT: 4.99,
   P_BULK: 3.99,
   BULK_MIN: 200,
@@ -1535,51 +1536,84 @@ const DEMO=[
 
 async function loadProducts(){
   showSkel();
-
-  // Strategies: direct first, then CORS proxies
-  const csvBase = CFG.SHEET_CSV;
-  const urls = [
-    csvBase + '&t=' + Date.now(),
-    csvBase,
-    csvBase.replace('pub?output=csv','pub?gid=0&output=csv&t='+Date.now()),
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(csvBase),
-    'https://corsproxy.io/?' + encodeURIComponent(csvBase),
-  ];
-
   let loaded = false;
-  for(let attempt=0; attempt<urls.length; attempt++){
-    try{
-      const r = await fetch(urls[attempt]);
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const txt = await r.text();
-      if(!txt || txt.trim().length < 10) throw new Error('Empty response');
-      const parsed = parseCSV(txt);
-      if(parsed.length > 0){
-        allProducts = parsed;
-        setSyncLive(parsed.length + ' productos');
-        loaded = true;
-        break;
-      } else {
-        throw new Error('CSV parsed 0 products');
-      }
-    } catch(e){
-      console.warn('[TSZ] Attempt '+(attempt+1)+' failed:', e.message);
+
+  // Strategy 1: Web App (returns JSON with CORS headers — most reliable)
+  try{
+    const waUrl = CFG.WEB_APP + '?action=getAll&t=' + Date.now();
+    const r = await fetch(waUrl, {redirect:'follow'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    if(data.ok && data.products && data.products.length > 0){
+      allProducts = data.products.map(p=>({
+        nombre:      (p.nombre||'').trim(),
+        categoria:   normalizeCat(p.categoria||''),
+        sku:         (p.sku||'').trim(),
+        imagen:      (p.imagen||'').trim(),
+        badge:       normalizeBadge(p.badge||''),
+        id:          (p.id||'').trim(),
+        descripcion: (p.descripcion||'').trim()
+      }));
+      setSyncLive(allProducts.length + ' productos');
+      loaded = true;
+      console.log('[TSZ] Web App:', allProducts.length, 'productos');
+    }
+  } catch(e){ console.warn('[TSZ] Web App failed:', e.message); }
+
+  // Strategy 2: Direct CSV fetch with proxies
+  if(!loaded){
+    const csvUrls = [
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv' + '&t=' + Date.now(),
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv'),
+      'https://corsproxy.io/?' + encodeURIComponent('https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv'),
+    ];
+    for(let i=0; i<csvUrls.length; i++){
+      try{
+        const r = await fetch(csvUrls[i]);
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const txt = await r.text();
+        if(!txt||txt.trim().length<20) throw new Error('Empty');
+        const parsed = parseCSV(txt);
+        if(parsed.length > 0){
+          allProducts = parsed;
+          setSyncLive(parsed.length + ' productos');
+          loaded = true;
+          console.log('[TSZ] CSV attempt', i+1, ':', parsed.length, 'productos');
+          break;
+        }
+      } catch(e){ console.warn('[TSZ] CSV attempt', i+1, 'failed:', e.message); }
     }
   }
 
+  // Fallback: demo
   if(!loaded){
-    console.warn('[TSZ] All attempts failed — showing demo');
     allProducts = DEMO;
-    setSyncOff('Modo demo');
+    setSyncOff('Sin conexión — modo demo');
+    console.warn('[TSZ] Using demo products');
   }
 
   renderProducts(allProducts);
   updateCatImages(allProducts);
-  // Update hero stat count
   const heroCount = document.getElementById('heroStatCount');
   if(heroCount && allProducts.length > 0) heroCount.textContent = allProducts.length + '+';
-  // Update category card product counts
   updateCatCounts(allProducts);
+}
+
+function normalizeCat(v){
+  const s=(v||'').toLowerCase();
+  if(s.includes('sweet')||s.includes('candy')) return 'Sweet Zone';
+  if(s.includes('salud')||s.includes('belleza')||s.includes('health')) return 'Salud y Belleza';
+  if(s.includes('maquill')||s.includes('cosmet')||s.includes('makeup')) return 'Maquillaje';
+  if(['Sweet Zone','Salud y Belleza','Maquillaje'].includes(v)) return v;
+  return v||'';
+}
+function normalizeBadge(v){
+  const s=(v||'').toLowerCase().trim();
+  if(s.includes('new')||s.includes('nuevo')) return 'new';
+  if(s.includes('hot')||s.includes('popular')) return 'hot';
+  if(s.includes('sale')||s.includes('oferta')) return 'sale';
+  return '';
 }
 
 function updateCatCounts(prods){
