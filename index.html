@@ -280,9 +280,10 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   align-items:flex-start;
   justify-content:flex-end;
   text-align:left;
-  padding:calc(var(--hh) + 40px) clamp(24px,8vw,120px) 100px;
+  padding:calc(var(--hh) + 60px) clamp(28px,7vw,110px) 90px;
   gap:0;
-  max-width:900px;
+  max-width:860px;
+  box-sizing:border-box;
 }
 
 /* EYEBROW */
@@ -304,13 +305,13 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 /* H1 — una fuente, limpia, profesional */
 .hero-h1{
   font-family:'Playfair Display',serif;
-  font-size:clamp(3.8rem,8vw,9rem);
-  line-height:1.0;
+  font-size:clamp(3rem,7vw,8rem);
+  line-height:1.05;
   font-weight:700;
-  margin-bottom:36px;
+  margin-bottom:28px;
   overflow:hidden;
   width:100%;
-  max-width:860px;
+  max-width:800px;
 }
 .hero-h1 .line{display:block;overflow:hidden}
 .hero-h1 .line-inner{
@@ -481,20 +482,35 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .band-item::after{content:'✦';color:var(--R2);font-size:.5rem}
 
 /* MOBILE */
-@media(max-width:768px){
-  .hero-content{padding:calc(var(--hh)+48px) 22px 80px;justify-content:flex-end;text-align:left;align-items:flex-start}
-  .hero-h1{font-size:clamp(3.4rem,13vw,6rem)}
-  .hero-h1 .line:nth-child(1) .line-inner{font-size:.38em;letter-spacing:6px}
+@media(max-width:900px){
+  .hero-content{padding:calc(var(--hh)+40px) 28px 72px;align-items:flex-start;text-align:left;justify-content:flex-end}
+  .hero-h1{font-size:clamp(2.6rem,10vw,5rem);margin-bottom:20px}
+  .hero-h1 .line:nth-child(1) .line-inner{font-size:.42em;letter-spacing:4px}
+  .hero-eyebrow{font-size:.55rem;letter-spacing:3px;margin-bottom:16px}
+  .hero-p{font-size:.88rem;max-width:100%;margin-bottom:20px;border-left-width:2px;padding-left:12px}
+  .hero-chips{flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .hero-chip{font-size:.72rem;padding:8px 12px}
+  .hero-chip strong{font-size:.82rem}
+  .hero-actions{flex-direction:row;flex-wrap:wrap;gap:10px}
   .hero-stats{display:none}
-  .hero-scroll{bottom:80px}
-  .hero-p{font-size:.92rem;max-width:100%}
-  .hero-actions{flex-direction:column;align-items:flex-start;width:100%;max-width:280px}
-  .btn-prim,.btn-ghost{justify-content:center}
+  .hero-scroll{display:none}
 }
-@media(max-width:480px){
-  .hero-h1{font-size:clamp(3rem,15vw,5rem)}
-  .hero-chips{gap:8px}
-  .hero-chip{font-size:.74rem;padding:8px 14px}
+@media(max-width:600px){
+  .hero-content{padding:calc(var(--hh)+32px) 20px 60px}
+  .hero-h1{font-size:clamp(2.2rem,11vw,3.8rem);margin-bottom:16px;line-height:1.05}
+  .hero-h1 .line{overflow:visible}
+  .hero-eyebrow{font-size:.52rem;margin-bottom:14px}
+  .hero-p{font-size:.84rem;margin-bottom:18px;line-height:1.65}
+  .hero-chips{gap:6px;margin-bottom:20px}
+  .hero-chip{font-size:.68rem;padding:7px 10px}
+  .hero-actions{flex-direction:column;align-items:stretch;gap:8px;max-width:260px}
+  .btn-prim,.btn-ghost{justify-content:center;padding:13px 20px;font-size:.74rem}
+  .hero-cta-strip{display:none}
+}
+@media(max-width:400px){
+  .hero-content{padding:calc(var(--hh)+24px) 16px 48px}
+  .hero-h1{font-size:clamp(2rem,12vw,3.2rem)}
+  .hero-p{font-size:.8rem}
 }
 
 /* ═══════════════════════════════════════
@@ -622,7 +638,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 
 @media(max-width:1200px){.p-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.p-grid{grid-template-columns:repeat(2,1fr)}.prod-section{padding:72px var(--pad)}}
-@media(max-width:480px){.p-grid{grid-template-columns:repeat(2,1fr);gap:8px}.prod-section{padding:64px 18px}}
+@media(max-width:480px){.p-grid{grid-template-columns:repeat(2,1fr);gap:8px}.prod-section{padding:48px 16px}.p-name{font-size:.78rem}.p-cat{font-size:.55rem}.unit-p{font-size:.82rem}}
 
 /* ═══════════════════════════════════════
    PROMO STRIP
@@ -1102,7 +1118,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 ════════════════════════════ -->
 <section class="prod-section" id="products">
   <div class="sec-label reveal fl">Catálogo</div>
-  <h2 class="sec-h reveal d1" style="margin-bottom:32px">Productos <em>Destacados</em></h2>
+  <h2 class="sec-h reveal d1" style="margin-bottom:28px">Productos <em>Destacados</em></h2>
   <div class="prod-search-wrap reveal d1">
     <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
     <input type="text" id="prodSearchInp" placeholder="Buscar productos por nombre o categoría…" oninput="searchProds(this.value)"/>
@@ -1521,76 +1537,124 @@ function showToast(msg){document.getElementById('toastTxt').textContent=msg;toas
 ══════════════════════════ */
 let allProducts=[];
 const DEMO=[
-  {nombre:'Producto Sweet Zone #1',categoria:'Sweet Zone',sku:'TSZ-001',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:'new'},
-  {nombre:'Producto Sweet Zone #2',categoria:'Sweet Zone',sku:'TSZ-002',imagen:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&auto=format&fit=crop',badge:'hot'},
-  {nombre:'Producto Sweet Zone #3',categoria:'Sweet Zone',sku:'TSZ-003',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:''},
-  {nombre:'Producto Sweet Zone #4',categoria:'Sweet Zone',sku:'TSZ-004',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:'sale'},
-  {nombre:'Crema Hidratante Facial',categoria:'Salud y Belleza',sku:'SB-001',imagen:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&auto=format&fit=crop',badge:'new'},
-  {nombre:'Sérum Vitamina C',categoria:'Salud y Belleza',sku:'SB-002',imagen:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&auto=format&fit=crop',badge:'hot'},
-  {nombre:'Aceite Corporal',categoria:'Salud y Belleza',sku:'SB-003',imagen:'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&auto=format&fit=crop',badge:''},
-  {nombre:'Set Cuidado Facial',categoria:'Salud y Belleza',sku:'SB-004',imagen:'https://images.unsplash.com/photo-1526045431048-f857369baa09?w=400&auto=format&fit=crop',badge:'sale'},
-  {nombre:'Paleta de Sombras',categoria:'Maquillaje',sku:'MQ-001',imagen:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop',badge:'hot'},
-  {nombre:'Labial Líquido Matte',categoria:'Maquillaje',sku:'MQ-002',imagen:'https://images.unsplash.com/photo-1600428853876-fb5522a5d0d5?w=400&auto=format&fit=crop',badge:'new'},
-  {nombre:'Base Full Coverage',categoria:'Maquillaje',sku:'MQ-003',imagen:'https://images.unsplash.com/photo-1631214524020-3c69a4a6f5f4?w=400&auto=format&fit=crop',badge:''},
-  {nombre:'Set de Brochas x12',categoria:'Maquillaje',sku:'MQ-004',imagen:'https://images.unsplash.com/photo-1643185540687-38d1f33b5e85?w=400&auto=format&fit=crop',badge:'sale'},
+  {nombre:'Gotas Bronceadoras',categoria:'Maquillaje',sku:'MQ-001',imagen:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop',badge:'new',descripcion:'Gotas bronceadoras de alta duracion, formula ligera apta para todo tipo de piel.'},
+  {nombre:'Crema Hidratante Facial',categoria:'Salud y Belleza',sku:'SB-001',imagen:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&auto=format&fit=crop',badge:'hot',descripcion:'Crema hidratante de uso diario. Textura ligera, absorcion rapida.'},
+  {nombre:'Paleta de Sombras',categoria:'Maquillaje',sku:'MQ-002',imagen:'https://images.unsplash.com/photo-1600428853876-fb5522a5d0d5?w=400&auto=format&fit=crop',badge:'',descripcion:'Paleta con 12 tonos aptos para looks de dia y noche.'},
+  {nombre:'Serum Vitamina C',categoria:'Salud y Belleza',sku:'SB-002',imagen:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&auto=format&fit=crop',badge:'sale',descripcion:'Serum antioxidante que ilumina y unifica el tono de la piel.'},
+  {nombre:'Labial Liquido Matte',categoria:'Maquillaje',sku:'MQ-003',imagen:'https://images.unsplash.com/photo-1631214524020-3c69a4a6f5f4?w=400&auto=format&fit=crop',badge:'new',descripcion:'Labial de larga duracion con acabado mate aterciopelado.'},
+  {nombre:'Aceite Corporal',categoria:'Salud y Belleza',sku:'SB-003',imagen:'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&auto=format&fit=crop',badge:'',descripcion:'Aceite nutritivo para piel seca. Con vitamina E y aceite de jojoba.'},
+  {nombre:'Kit Cuidado Facial',categoria:'Sweet Zone',sku:'TSZ-001',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:'hot',descripcion:'Kit completo de cuidado facial con limpiador, tonico y crema.'},
+  {nombre:'Set de Brochas x12',categoria:'Maquillaje',sku:'MQ-004',imagen:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop',badge:'sale',descripcion:'Set de 12 brochas profesionales para maquillaje en pelo sintetico.'},
 ];
 
-async function loadProducts(){
+// JSONP callback — called by script tag injection
+function _tszLoad(data) {
+  if (data && data.ok && Array.isArray(data.products) && data.products.length > 0) {
+    allProducts = data.products.map(function(p){
+      return {
+        nombre:      String(p.nombre      ||'').trim(),
+        categoria:   normalizeCat(String(p.categoria  ||'')),
+        sku:         String(p.sku         ||'').trim(),
+        imagen:      String(p.imagen      ||'').trim(),
+        badge:       normalizeBadge(String(p.badge    ||'')),
+        id:          String(p.id          ||'').trim(),
+        descripcion: String(p.descripcion ||'').trim()
+      };
+    });
+    setSyncLive(allProducts.length + ' productos');
+    console.log('[TSZ] JSONP cargados:', allProducts.length);
+  } else {
+    console.warn('[TSZ] JSONP: sin productos, usando demo');
+    allProducts = DEMO;
+    setSyncOff('Sin conexion — modo demo');
+  }
+  renderProducts(allProducts);
+  updateCatImages(allProducts);
+  updateCatCounts(allProducts);
+  const hc = document.getElementById('heroStatCount');
+  if (hc && allProducts.length > 0) hc.textContent = allProducts.length + '+';
+}
+
+function loadProducts(){
   showSkel();
 
-  // Cargar desde Google Apps Script — JSON con CORS correcto
-  try {
-    const url = CFG.WA_URL + '?action=getAll&t=' + Date.now();
-    const r   = await fetch(url, {redirect:'follow'});
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const data = await r.json();
-    if (data.ok && Array.isArray(data.products) && data.products.length > 0) {
-      allProducts = data.products.map(function(p){
-        return {
-          nombre:      String(p.nombre      ||'').trim(),
-          categoria:   normalizeCat(String(p.categoria ||'')),
-          sku:         String(p.sku         ||'').trim(),
-          imagen:      String(p.imagen      ||'').trim(),
-          badge:       normalizeBadge(String(p.badge   ||'')),
-          id:          String(p.id          ||'').trim(),
-          descripcion: String(p.descripcion ||'').trim()
-        };
-      });
-      setSyncLive(allProducts.length + ' productos');
-      console.log('[TSZ] Cargados:', allProducts.length, 'productos');
-      renderProducts(allProducts);
-      updateCatImages(allProducts);
-      updateCatCounts(allProducts);
-      const hc = document.getElementById('heroStatCount');
-      if (hc) hc.textContent = allProducts.length + '+';
-      return;
-    }
-    throw new Error('Sin productos en respuesta');
-  } catch(e) {
-    console.warn('[TSZ] Web App error:', e.message);
-  }
+  // Method 1: JSONP via script tag (bypasses CORS — works if GAS supports callback param)
+  var cbName = '_tszCB' + Date.now();
+  var timer;
+  var done = false;
 
-  // Fallback: CSV via proxy
-  try {
-    const csvUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.SHEET_CSV + '&t=' + Date.now());
-    const r = await fetch(csvUrl);
-    if (r.ok) {
+  window[cbName] = function(data){
+    done = true;
+    clearTimeout(timer);
+    var s = document.getElementById('_tszS');
+    if(s) s.remove();
+    delete window[cbName];
+    _tszLoad(data);
+  };
+
+  var s = document.createElement('script');
+  s.id  = '_tszS';
+  s.src = CFG.WA_URL + '?action=getAll&callback=' + cbName + '&t=' + Date.now();
+  
+  // Timeout fallback: if GAS doesn't support JSONP, try fetch
+  timer = setTimeout(function(){
+    if(done) return;
+    done = true;
+    var s2 = document.getElementById('_tszS');
+    if(s2) s2.remove();
+    delete window[cbName];
+    console.warn('[TSZ] JSONP timeout — trying fetch');
+    _tszFetch();
+  }, 5000);
+
+  s.onerror = function(){
+    if(done) return;
+    done = true;
+    clearTimeout(timer);
+    delete window[cbName];
+    console.warn('[TSZ] JSONP script error — trying fetch');
+    _tszFetch();
+  };
+
+  document.head.appendChild(s);
+}
+
+async function _tszFetch(){
+  // Direct fetch — works when CORS headers are present
+  const urls = [
+    CFG.WA_URL + '?action=getAll&t=' + Date.now(),
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.WA_URL + '?action=getAll'),
+  ];
+  for(const url of urls){
+    try{
+      const r = await fetch(url);
+      if(!r.ok) continue;
       const txt = await r.text();
-      const parsed = parseCSV(txt);
-      if (parsed.length > 0) {
-        allProducts = parsed;
+      let data;
+      try{ data = JSON.parse(txt); }catch(e){ continue; }
+      if(data && data.ok && data.products && data.products.length > 0){
+        _tszLoad(data);
+        return;
+      }
+    }catch(e){ console.warn('[TSZ] fetch failed:', e.message); }
+  }
+  // Last resort: CSV proxy
+  try{
+    const r = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.SHEET_CSV));
+    if(r.ok){
+      const txt = await r.text();
+      const prods = parseCSV(txt);
+      if(prods.length > 0){
+        allProducts = prods;
         setSyncLive(allProducts.length + ' productos');
-        console.log('[TSZ] CSV fallback:', allProducts.length);
         renderProducts(allProducts);
         updateCatImages(allProducts);
         updateCatCounts(allProducts);
         return;
       }
     }
-  } catch(e2) { console.warn('[TSZ] CSV fallback failed:', e2.message); }
-
-  // Demo final
-  console.warn('[TSZ] Usando productos demo');
+  }catch(e){}
+  // Demo
   allProducts = DEMO;
   setSyncOff('Sin conexion — modo demo');
   renderProducts(allProducts);
