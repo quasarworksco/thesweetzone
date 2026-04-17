@@ -1187,20 +1187,27 @@ function checkDuplicateName(nombre, editingIdx){
 /* ══════════════════════════════════
    WEB APP SYNC
 ══════════════════════════════════ */
-async function syncToSheet(action, product, id){
+function syncToSheet(action, product, id){
   try{
-    const body = { action, product, id };
-    // Google Apps Script requires no-cors from browser
-    fetch(WEB_APP_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(body),
-    });
-    // Re-fetch CSV after a short delay to reflect the change
-    setTimeout(async ()=>{ await fetchAndSync(); }, 2200);
+    var params = new URLSearchParams();
+    params.set('action', action);
+    if(id) params.set('id', String(id));
+    if(product){
+      params.set('nombre',    product.nombre    || '');
+      params.set('categoria', product.categoria || '');
+      params.set('sku',       product.sku       || '');
+      params.set('imagen',    product.imagen    || '');
+      params.set('badge',     product.badge     || '');
+    }
+    var url = WEB_APP_URL + '?' + params.toString();
+    fetch(url, { method:'GET', mode:'no-cors' }).catch(function(){});
+    toast('Enviando al Sheet…','info');
+    setTimeout(async function(){
+      await fetchAndSync();
+      toast('Sheet actualizado ✓','success');
+    }, 3500);
   } catch(e){
-    toast('Error al sincronizar: '+e.message,'error');
+    toast('Error: '+e.message,'error');
   }
 }
 
