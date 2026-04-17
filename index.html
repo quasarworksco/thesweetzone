@@ -110,7 +110,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .hdr-nav a{font-size:.72rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--W3);text-decoration:none;padding:6px 12px;border-radius:3px;white-space:nowrap;transition:color .2s,background .2s}
 .hdr-nav a:hover{color:var(--W2);background:var(--W4)}
 .hdr-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.search-box{position:relative}
+.search-box{display:none!important;position:relative}
 .search-box input{background:var(--B4);border:1px solid var(--B5);padding:9px 36px 9px 14px;font-family:'Outfit',sans-serif;font-size:.8rem;color:var(--W2);border-radius:4px;width:180px;outline:none;transition:border-color .25s,width .35s var(--ease)}
 .search-box input:focus{border-color:var(--R);width:230px}
 .search-box input::placeholder{color:#555}
@@ -122,7 +122,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .mob-ham{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px}
 .mob-ham span{display:block;width:22px;height:1.5px;background:var(--W2);border-radius:1px;transition:transform .35s var(--ease),opacity .3s}
 @media(max-width:960px){
-  .hdr-nav,.search-box{display:none}
+  .hdr-nav,.search-box{display:none!important;display:none}
   .mob-ham{display:flex}
   .site-header{padding:0 20px}
   .logo-wrap{margin-right:0}
@@ -939,10 +939,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     <li><a href="#contact">Contacto</a></li>
   </ul>
   <div class="hdr-right">
-    <div class="search-box">
-      <input type="text" placeholder="Buscar…" id="searchInp" oninput="handleSearch(this.value)"/>
-      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-    </div>
+
     <button class="cart-trigger" id="cartBtn" aria-label="Carrito">
       <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h11v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H18c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0022.46 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
       <span class="cart-badge" id="cartBadge">0</span>
