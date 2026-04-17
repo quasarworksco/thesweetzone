@@ -508,7 +508,9 @@ function init(){
   if(saved){ try{ products=JSON.parse(saved); }catch(e){ products=[]; } }
   document.getElementById('cfgCsvUrl').value = CSV;
   renderDash(); renderTbl();
-  fetchCSV(); // always refresh from sheet on load
+  setSyncStatus(true, products.length + ' productos (local)');
+  // NO auto-fetchCSV al cargar — el usuario sincroniza manualmente con el botón
+  // para evitar que el CSV vacío/desactualizado borre los datos locales
 }
 
 // Auto-login if session exists
@@ -519,20 +521,35 @@ if(localStorage.getItem('tsz_sess')==='1'){
 
 /* ════════════════════════════════════════
    FETCH CSV — read products from sheet
+   MERGE: Sheet es fuente de verdad para IDs reales (TSZ...).
+   Productos pendientes (sin ID real aún) se conservan.
 ════════════════════════════════════════ */
 async function fetchCSV(){
   try{
     setSyncStatus(false,'Sincronizando…');
-    const res  = await fetch(CSV + '&t=' + Date.now());
-    const text = await res.text();
+    const res    = await fetch(CSV + '&t=' + Date.now());
+    const text   = await res.text();
     const parsed = parseCSV(text);
-    if(parsed.length || text.trim()){
-      products = parsed;
-      localStorage.setItem('tsz_products', JSON.stringify(products));
-      setSyncStatus(true, products.length + ' productos sincronizados');
+
+    // Conservar productos locales que AÚN NO están en el Sheet
+    // (los que tienen ID local "L..." porque el GAS aún no los confirmó)
+    const local   = products.filter(p => (p.id||'').startsWith('L'));
+    const sheetIds = new Set(parsed.map(p=>p.id));
+    const pending  = local.filter(p => !sheetIds.has(p.id));
+
+    if(parsed.length > 0){
+      // Sheet tiene datos: merge Sheet + pendientes locales
+      products = [...parsed, ...pending];
+      setSyncStatus(true, parsed.length + ' en Sheet' + (pending.length ? ' + '+pending.length+' pendientes' : ''));
+    } else if(text.trim() && text.trim() !== ''){
+      // Sheet responde pero vacío (solo encabezados)
+      // Conservar todo lo local para no perder nada
+      setSyncStatus(true, 'Sheet vacío — conservando datos locales');
     } else {
-      setSyncStatus(false,'Sheet vacío');
+      setSyncStatus(false,'Sin respuesta del Sheet');
     }
+
+    localStorage.setItem('tsz_products', JSON.stringify(products));
     renderDash(); renderTbl();
   } catch(e){
     setSyncStatus(false,'Sin conexión — datos locales');
@@ -560,9 +577,15 @@ function setSyncStatus(live,msg){
 }
 
 async function manualSync(){
-  toast('Sincronizando…','i');
+  const before = products.length;
+  toast('Sincronizando con Sheet…','i');
   await fetchCSV();
-  toast('Sincronizado ✓','s');
+  const after = products.length;
+  if(after >= before){
+    toast('✓ Sincronizado — ' + after + ' productos','s');
+  } else {
+    toast('⚠ Sheet tiene menos datos que local ('+after+' vs '+before+') — revisa el GAS','i');
+  }
 }
 
 /* ════════════════════════════════════════
@@ -812,11 +835,13 @@ async function saveProd(){
     const res = await callWA({ action:'add', ...prod });
     waOk = res.ok;
     if(res.ok && res.id){
-      prod.id = res.id; // use the real ID from sheet
-      toast('Producto agregado al Sheet ✓','s');
+      prod.id = res.id; // ID real del Sheet
+      toast('✓ Guardado en Sheet','s');
     } else {
-      prod.id = 'L'+(products.length+1);
-      toast('Guardado local — revisar Sheet','i');
+      prod.id = 'L'+(Date.now()); // ID local temporal único
+      const errMsg = res.error || res.message || 'Sin respuesta del GAS';
+      toast('Local: '+errMsg,'i');
+      console.warn('GAS error:', res);
     }
     products.push(prod);
   }
