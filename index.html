@@ -1328,6 +1328,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 ══════════════════════════ */
 const CFG = {
   WA: '17864195886',
+  WA_URL: 'https://script.google.com/macros/s/AKfycbx_v0Xa_52i356iAGpcZRqRylTGOdYQIxqIZJgnHmZkYvGlyK9QOqDkvi48oGuaNeEMXw/exec',
   WEB_APP: 'https://script.google.com/macros/s/AKfycbx_v0Xa_52i356iAGpcZRqRylTGOdYQIxqIZJgnHmZkYvGlyK9QOqDkvi48oGuaNeEMXw/exec',
   P_UNIT: 4.99,
   P_BULK: 3.99,
@@ -1536,69 +1537,67 @@ const DEMO=[
 
 async function loadProducts(){
   showSkel();
-  let loaded = false;
 
-  // Strategy 1: Web App (returns JSON with CORS headers — most reliable)
-  try{
-    const waUrl = CFG.WEB_APP + '?action=getAll&t=' + Date.now();
-    const r = await fetch(waUrl, {redirect:'follow'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
+  // Cargar desde Google Apps Script — JSON con CORS correcto
+  try {
+    const url = CFG.WA_URL + '?action=getAll&t=' + Date.now();
+    const r   = await fetch(url, {redirect:'follow'});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
-    if(data.ok && data.products && data.products.length > 0){
-      allProducts = data.products.map(p=>({
-        nombre:      (p.nombre||'').trim(),
-        categoria:   normalizeCat(p.categoria||''),
-        sku:         (p.sku||'').trim(),
-        imagen:      (p.imagen||'').trim(),
-        badge:       normalizeBadge(p.badge||''),
-        id:          (p.id||'').trim(),
-        descripcion: (p.descripcion||'').trim()
-      }));
+    if (data.ok && Array.isArray(data.products) && data.products.length > 0) {
+      allProducts = data.products.map(function(p){
+        return {
+          nombre:      String(p.nombre      ||'').trim(),
+          categoria:   normalizeCat(String(p.categoria ||'')),
+          sku:         String(p.sku         ||'').trim(),
+          imagen:      String(p.imagen      ||'').trim(),
+          badge:       normalizeBadge(String(p.badge   ||'')),
+          id:          String(p.id          ||'').trim(),
+          descripcion: String(p.descripcion ||'').trim()
+        };
+      });
       setSyncLive(allProducts.length + ' productos');
-      loaded = true;
-      console.log('[TSZ] Web App:', allProducts.length, 'productos');
+      console.log('[TSZ] Cargados:', allProducts.length, 'productos');
+      renderProducts(allProducts);
+      updateCatImages(allProducts);
+      updateCatCounts(allProducts);
+      const hc = document.getElementById('heroStatCount');
+      if (hc) hc.textContent = allProducts.length + '+';
+      return;
     }
-  } catch(e){ console.warn('[TSZ] Web App failed:', e.message); }
-
-  // Strategy 2: Direct CSV fetch with proxies
-  if(!loaded){
-    const csvUrls = [
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv',
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv' + '&t=' + Date.now(),
-      'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv'),
-      'https://corsproxy.io/?' + encodeURIComponent('https://docs.google.com/spreadsheets/d/e/2PACX-1vTyiDmBb5zGgsby2CjKy1AlB64Tfy8hzUF0SN0_zk9jhiCJXBFFYQ2syui6QVLblODJDd4RVZLoQjgr/pub?output=csv'),
-    ];
-    for(let i=0; i<csvUrls.length; i++){
-      try{
-        const r = await fetch(csvUrls[i]);
-        if(!r.ok) throw new Error('HTTP '+r.status);
-        const txt = await r.text();
-        if(!txt||txt.trim().length<20) throw new Error('Empty');
-        const parsed = parseCSV(txt);
-        if(parsed.length > 0){
-          allProducts = parsed;
-          setSyncLive(parsed.length + ' productos');
-          loaded = true;
-          console.log('[TSZ] CSV attempt', i+1, ':', parsed.length, 'productos');
-          break;
-        }
-      } catch(e){ console.warn('[TSZ] CSV attempt', i+1, 'failed:', e.message); }
-    }
+    throw new Error('Sin productos en respuesta');
+  } catch(e) {
+    console.warn('[TSZ] Web App error:', e.message);
   }
 
-  // Fallback: demo
-  if(!loaded){
-    allProducts = DEMO;
-    setSyncOff('Sin conexión — modo demo');
-    console.warn('[TSZ] Using demo products');
-  }
+  // Fallback: CSV via proxy
+  try {
+    const csvUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CFG.SHEET_CSV + '&t=' + Date.now());
+    const r = await fetch(csvUrl);
+    if (r.ok) {
+      const txt = await r.text();
+      const parsed = parseCSV(txt);
+      if (parsed.length > 0) {
+        allProducts = parsed;
+        setSyncLive(allProducts.length + ' productos');
+        console.log('[TSZ] CSV fallback:', allProducts.length);
+        renderProducts(allProducts);
+        updateCatImages(allProducts);
+        updateCatCounts(allProducts);
+        return;
+      }
+    }
+  } catch(e2) { console.warn('[TSZ] CSV fallback failed:', e2.message); }
 
+  // Demo final
+  console.warn('[TSZ] Usando productos demo');
+  allProducts = DEMO;
+  setSyncOff('Sin conexion — modo demo');
   renderProducts(allProducts);
   updateCatImages(allProducts);
-  const heroCount = document.getElementById('heroStatCount');
-  if(heroCount && allProducts.length > 0) heroCount.textContent = allProducts.length + '+';
   updateCatCounts(allProducts);
 }
+
 
 function normalizeCat(v){
   const s=(v||'').toLowerCase();
