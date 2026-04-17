@@ -1200,16 +1200,34 @@ function syncToSheet(action, product, id){
       params.set('badge',     product.badge     || '');
     }
     var url = WEB_APP_URL + '?' + params.toString();
-    fetch(url, { method:'GET', mode:'no-cors' }).catch(function(){});
-    toast('Enviando al Sheet…','info');
+
+    // ── Método script-tag: único que cruza CORS a Google Apps Script ──
+    var script = document.createElement('script');
+    script.src = url + '&callback=_tszCb_' + Date.now();
+    script.onerror = function(){ document.head.removeChild(script); };
+    script.onload  = function(){ document.head.removeChild(script); };
+    document.head.appendChild(script);
+
+    toast('Enviando al Google Sheet…','info');
+
+    // Re-sync CSV después de 4s para confirmar
     setTimeout(async function(){
       await fetchAndSync();
-      toast('Sheet actualizado ✓','success');
-    }, 3500);
+    }, 4000);
+
   } catch(e){
     toast('Error: '+e.message,'error');
   }
 }
+
+// Callback global para JSONP (requerido por el script tag)
+window._tszCallback = function(data){
+  if(data && data.ok){
+    toast('Sheet actualizado: '+( data.message||'OK'),'success');
+  } else {
+    toast('Error en Sheet: '+(data&&data.error||'desconocido'),'error');
+  }
+};
 
 async function manualSync(){
   toast('Sincronizando con Google Sheet…','info');
