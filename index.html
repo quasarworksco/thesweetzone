@@ -98,7 +98,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 /* CART DRAWER */
 .cart-veil{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;opacity:0;pointer-events:none;transition:opacity .35s;backdrop-filter:blur(5px)}
 .cart-veil.open{opacity:1;pointer-events:all}
-.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);background:#0a0a0a;z-index:1001;border-left:1px solid rgba(200,39,45,.2);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .45s var(--ease)}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);max-width:100vw;background:#0a0a0a;z-index:1001;border-left:1px solid rgba(200,39,45,.2);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .45s var(--ease);overflow:hidden}
 .cart-drawer.open{transform:translateX(0)}
 .cart-hdr{padding:22px 20px;border-bottom:1px solid var(--B4);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .cart-hdr h3{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700}
@@ -142,6 +142,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .cart-form-section{padding:14px 16px;border-top:1px solid var(--B4)}
 .cart-form-title{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--W2);font-weight:700;margin-bottom:10px}
 .cart-form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+@media(max-width:400px){.cart-form-row{grid-template-columns:1fr}}
 .cart-form-field{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
 .cart-form-field label{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--W3);font-weight:600}
 .cart-form-field input{background:#111;border:1px solid #222;border-bottom:2px solid #222;padding:9px 11px;color:var(--W2);font-family:'Outfit',sans-serif;font-size:.84rem;border-radius:4px;outline:none;transition:border-color .2s;width:100%}
@@ -152,6 +153,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .ship-opt:has(input:checked){border-color:var(--R);background:rgba(200,39,45,.1);color:var(--W2)}
 .ship-opt input{display:none}
 .cart-pay-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px}
+@media(max-width:360px){.cart-pay-opts{grid-template-columns:1fr 1fr}}
 .pay-btn{padding:9px 8px;background:#111;border:1.5px solid #222;border-radius:6px;color:var(--W3);font-family:'Outfit',sans-serif;font-size:.76rem;cursor:pointer;transition:all .2s;text-align:left}
 .pay-btn:hover{border-color:#333;color:#fff;background:#1a1a1a}
 .pay-btn.selected{border-color:var(--R);background:rgba(200,39,45,.12);color:var(--W2)}
@@ -204,14 +206,14 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .hero-bg{position:absolute;inset:0;z-index:0}
 .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;filter:brightness(.35) saturate(.5);animation:heroImgZoom 18s ease-out forwards}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.88) 0%,rgba(0,0,0,.6) 45%,rgba(0,0,0,.25) 100%),linear-gradient(to bottom,rgba(0,0,0,.3) 0%,transparent 40%,rgba(0,0,0,.7) 100%)}
-.hero-content{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;padding:calc(var(--hh) + 60px) clamp(28px,7vw,110px) 90px;max-width:860px}
+.hero-content{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;padding:calc(var(--hh) + 80px) clamp(24px,6vw,100px) 100px;max-width:900px}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.6rem;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:24px;opacity:0;animation:fadeIn .8s .2s var(--ease) forwards}
 .hero-h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,7vw,8rem);line-height:1.05;font-weight:700;margin-bottom:28px;width:100%;max-width:800px}
 .hero-h1 .line{display:block;overflow:hidden}
 .hero-h1 .line-inner{display:block;opacity:0;transform:translateY(100%);animation:textReveal .9s var(--ease) forwards}
-.hero-h1 .line:nth-child(1) .line-inner{animation-delay:.4s;color:#fff}
+.hero-h1 .line:nth-child(1) .line-inner{animation-delay:.4s;color:#fff;font-style:normal}
 .hero-h1 .line:nth-child(2) .line-inner{animation-delay:.55s;color:#fff;font-style:italic}
-.hero-h1 .line:nth-child(3) .line-inner{animation-delay:.7s;color:var(--R2);font-style:italic}
+.hero-h1 .line:nth-child(3) .line-inner{animation-delay:.7s;color:#fff;font-style:normal}
 .hero-p{font-size:clamp(.95rem,2vw,1.08rem);color:rgba(255,255,255,.6);line-height:1.8;max-width:500px;margin:0 0 36px;font-weight:300;opacity:0;animation:fadeUp .9s .9s var(--ease) forwards}
 .hero-chips{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;opacity:0;animation:fadeUp .8s 1.2s var(--ease) forwards}
 .hero-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(12px);padding:10px 18px;border-radius:40px;font-size:.8rem;color:var(--W2);font-weight:500}
@@ -235,6 +237,29 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 @media(max-width:900px){.hero-content{padding:calc(var(--hh)+40px) 28px 80px}.hero-h1{font-size:clamp(2.6rem,10vw,5rem)}.hero-stats{display:none}.hero-scroll{display:none}}
 @media(max-width:600px){.hero-content{padding:calc(var(--hh)+32px) 20px 64px}.hero-h1{font-size:clamp(2.2rem,11vw,3.8rem)}.hero-p{margin-bottom:28px}.hero-chips{gap:8px;margin-bottom:32px}.hero-actions{flex-direction:column;align-items:stretch;max-width:280px;gap:12px}.btn-prim,.btn-gold,.btn-ghost{justify-content:center;padding:14px 20px}}
 
+/* ── GLOBAL SECTION MOBILE PADDING ── */
+@media(max-width:600px){
+  .premium-section,.premium-catalog,.prod-section,.about-section,.contact-section,.cat-section{padding-left:20px!important;padding-right:20px!important}
+  .sec-h{font-size:clamp(2rem,9vw,3rem)}
+  .pm-cat-grid{grid-template-columns:1fr!important}
+  .pm-cat-card-body{padding:18px 16px 20px}
+  .premium-inner{gap:36px}
+  .premium-right{grid-template-columns:1fr 1fr;grid-template-rows:160px 160px}
+  .premium-right .pm-img:first-child{grid-row:auto}
+  .premium-prices{grid-template-columns:1fr 1fr;gap:12px}
+  .pprice-card{padding:16px 12px}
+  .pprice-amt{font-size:1.4rem}
+  .about-section{grid-template-columns:1fr!important;padding:56px 20px!important;gap:40px!important}
+  .about-imgs{grid-template-columns:1fr 1fr;grid-template-rows:140px 140px;gap:8px}
+  .about-imgs .a-img:first-child{grid-row:span 2}
+  .contact-section{grid-template-columns:1fr!important;padding:56px 20px 60px!important;gap:40px!important}
+  .reseller-inner{grid-template-columns:1fr!important}
+  .prod-page.active{grid-template-columns:repeat(2,1fr)!important;gap:8px!important}
+  .prod-section{padding:56px 20px 60px!important}
+  .filter-row{gap:6px}
+  .flt{font-size:.65rem;padding:8px 14px}
+}
+
 /* ══════════ SWEET ORGASM SECTION (Premium) ══════════ */
 .premium-section{padding:120px var(--pad) 80px;background:#050505;position:relative;overflow:hidden;border-top:1px solid rgba(201,168,76,.15)}
 .premium-section::before{content:'SO';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,20vw,320px);color:rgba(201,168,76,.03);white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:.05em}
@@ -244,7 +269,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 .premium-left>p{font-size:.95rem;color:var(--W3);line-height:1.9;max-width:440px;margin-bottom:40px}
 
 /* PREMIUM PRICE CARDS */
-.premium-prices{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+.premium-prices{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:44px}
 .pprice-card{background:var(--B3);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:24px 20px;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s var(--ease)}
 .pprice-card:hover{border-color:var(--GOLD);transform:translateY(-4px)}
 .pprice-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--GOLD),transparent)}
@@ -480,47 +505,53 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 /* ══════════ PRODUCT DETAIL MODAL ══════════ */
 .pd-veil{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px)}
 .pd-veil.open{opacity:1;pointer-events:all}
-.pd-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(860px,96vw);max-height:92vh;overflow-y:auto;background:#0a0a0a;border:1px solid #1a1a1a;border-top:2px solid var(--R);border-radius:10px;z-index:601;opacity:0;pointer-events:none;transition:all .38s var(--ease)}
+.pd-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(860px,96vw);max-height:90vh;overflow-y:auto;background:#0a0a0a;border:1px solid #1a1a1a;border-top:2px solid var(--R);border-radius:10px;z-index:601;opacity:0;pointer-events:none;transition:all .38s var(--ease)}
 .pd-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all}
 .pd-modal.gold-modal{border-top-color:var(--GOLD)}
 .pd-modal::-webkit-scrollbar{width:3px}.pd-modal::-webkit-scrollbar-thumb{background:var(--R3)}
-.pd-close{position:absolute;top:14px;right:14px;background:#111;border:1px solid #222;width:38px;height:38px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1}
+.pd-close{position:absolute;top:14px;right:14px;background:#111;border:1px solid #222;width:38px;height:38px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;flex-shrink:0}
 .pd-close:hover{background:var(--R);border-color:var(--R)}.pd-close svg{width:18px;height:18px;fill:#fff}
-.pd-body{display:grid;grid-template-columns:1fr 1fr;min-height:480px}
+.pd-body{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
+@media(max-width:680px){
+  .pd-modal{width:min(860px,100vw);max-height:95vh;top:auto;bottom:0;left:0;right:0;transform:translateY(20px) scale(.98);border-radius:16px 16px 0 0;margin:0}
+  .pd-modal.open{transform:translateY(0) scale(1)}
+  .pd-body{grid-template-columns:1fr}
+  .pd-img-wrap{min-height:220px}
+  .pd-info-col{padding:20px 18px 28px}
+}
 .pd-img-col{background:#111;position:relative;overflow:hidden}
 .pd-img-wrap{position:relative;height:100%;min-height:380px}
 .pd-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
 .pd-modal.open .pd-img-wrap img{transform:scale(1.03)}
 .pd-badge-wrap{position:absolute;top:14px;left:14px}
 .pd-info-col{padding:36px 32px;display:flex;flex-direction:column}
-.pd-cat{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:10px}
+.pd-cat{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:12px}
 .pd-cat.gold{color:var(--GOLD)}
-.pd-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:8px}
-.pd-sku{font-family:'Space Mono',monospace;font-size:.65rem;color:#444;margin-bottom:16px}
-.pd-desc{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:22px;border-left:2px solid #1a1a1a;padding-left:14px;flex:1}
+.pd-name{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:#fff;line-height:1.25;margin-bottom:10px}
+.pd-sku{font-family:'Space Mono',monospace;font-size:.65rem;color:#444;margin-bottom:18px}
+.pd-desc{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:24px;border-left:2px solid #1a1a1a;padding-left:14px;flex:1}
 .pd-desc:empty{display:none}
-.pd-prices{display:flex;gap:0;border:1px solid #1a1a1a;border-radius:6px;overflow:hidden;margin-bottom:22px}
+.pd-prices{display:flex;gap:0;border:1px solid #1a1a1a;border-radius:6px;overflow:hidden;margin-bottom:24px}
 .pd-price-block{flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
 .pd-price-block.bulk{background:rgba(200,39,45,.06);border-left:1px solid #1a1a1a}
 .pd-price-lbl{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
 .pd-price-val{font-family:'Space Mono',monospace;font-size:1.2rem;font-weight:700;color:#fff}
-.pd-qty-section{margin-bottom:14px}
-.pd-qty-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
-.pd-qty-row{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.pd-qty-section{margin-bottom:16px}
+.pd-qty-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
+.pd-qty-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .pd-qbtn{width:34px;height:34px;background:#111;border:1px solid #222;border-radius:4px;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .pd-qbtn:hover{background:var(--R);border-color:var(--R)}
 .pd-qty-n{font-family:'Space Mono',monospace;font-size:1.1rem;color:#fff;font-weight:700;min-width:40px;text-align:center}
 .pd-presets{display:flex;gap:6px;flex-wrap:wrap}
 .pd-presets button{padding:6px 12px;background:#111;border:1px solid #1a1a1a;border-radius:4px;color:rgba(255,255,255,.5);font-size:.7rem;cursor:pointer;transition:all .2s}
 .pd-presets button:hover{background:var(--R);border-color:var(--R);color:#fff}
-.pd-subtotal{font-size:.84rem;color:rgba(255,255,255,.5);margin-bottom:16px}
+.pd-subtotal{font-size:.84rem;color:rgba(255,255,255,.5);margin-bottom:18px}
 .pd-subtotal strong{color:#fff;font-family:'Space Mono',monospace}
 .pd-add-btn{width:100%;padding:14px;background:var(--R);color:#fff;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
 .pd-add-btn:hover{background:var(--R2);transform:translateY(-2px)}
 .pd-add-btn.gold-btn{background:var(--GOLD);color:#1a1000}
 .pd-add-btn.gold-btn:hover{background:var(--GOLD2)}
 .pd-add-btn svg{width:16px;height:16px;fill:currentColor}
-@media(max-width:680px){.pd-body{grid-template-columns:1fr}.pd-img-wrap{min-height:240px}.pd-info-col{padding:22px 18px}}
 
 /* WA FLOAT */
 .wa-float{position:fixed;bottom:28px;right:28px;z-index:800;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;text-decoration:none;padding:14px 20px 14px 16px;border-radius:50px;box-shadow:0 4px 24px rgba(37,211,102,.35);transition:transform .3s var(--ease),box-shadow .3s;animation:fadeUp .8s 2s var(--ease) both}
@@ -570,9 +601,8 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 <nav class="mob-nav" id="mobNav">
   <a href="#home" onclick="closeMob()">Inicio</a>
   <a href="#sweetorgasm" onclick="closeMob()" class="mob-gold">Sweet Orgasm</a>
-  <a href="#categories" onclick="closeMob()">Categorías</a>
   <a href="#products" onclick="closeMob()">Productos</a>
-  <a href="#mayoreo" onclick="closeMob()">Mayoreo</a>
+  <a href="#about" onclick="closeMob()">Nosotros</a>
   <a href="#contact" onclick="closeMob()">Contacto</a>
 </nav>
 
@@ -584,9 +614,8 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   <ul class="hdr-nav">
     <li><a href="#home">Inicio</a></li>
     <li><a href="#sweetorgasm" class="gold-link">✦ Sweet Orgasm</a></li>
-    <li><a href="#categories">Categorías</a></li>
     <li><a href="#products">Productos</a></li>
-    <li><a href="#mayoreo">Mayoreo</a></li>
+    <li><a href="#about">Nosotros</a></li>
     <li><a href="#contact">Contacto</a></li>
   </ul>
   <div class="hdr-right">
@@ -671,9 +700,9 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   <div class="hero-content">
     <div class="hero-eyebrow">Tu tienda de confianza</div>
     <h1 class="hero-h1">
-      <span class="line"><span class="line-inner">Calidad real.</span></span>
-      <span class="line"><span class="line-inner">Precios que</span></span>
-      <span class="line"><span class="line-inner">funcionan.</span></span>
+      <span class="line"><span class="line-inner">Calidad Real.</span></span>
+      <span class="line"><span class="line-inner">Precios para</span></span>
+      <span class="line"><span class="line-inner">Emprendedores.</span></span>
     </h1>
     <p class="hero-p">Maquillaje, Salud &amp; Belleza a $4.99 la unidad. Fragancias premium Sweet Orgasm desde $19.99. Mayoreo disponible.</p>
     <div class="hero-chips">
@@ -683,7 +712,6 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     </div>
     <div class="hero-actions">
       <a href="#products" class="btn-prim">Ver Productos <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></a>
-      <a href="#sweetorgasm" class="btn-gold">✦ Sweet Orgasm <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></a>
     </div>
   </div>
   <div class="hero-stats">
@@ -718,12 +746,11 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
           <div class="pprice-desc">Experiencia completa, larga duración garantizada</div>
         </div>
       </div>
-      <div class="reveal d4" style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="reveal d4">
         <a href="#" class="btn-gold" onclick="scrollToPremiumCatalog()">Ver Colección <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></a>
       </div>
     </div>
     <div class="premium-right reveal fr d1">
-      <!-- Tus 3 fotos de Sweet Orgasm -->
       <div class="pm-img" onclick="openPDPremium(0)">
         <img src="https://drive.google.com/thumbnail?id=1wKEy2yNUhAfOITrKW15SemW9ARDWFW9E&sz=s800" alt="Sweet Orgasm Women" onerror="this.src='https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&auto=format&fit=crop'"/>
       </div>
@@ -748,31 +775,6 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
 </section>
 
 <!-- ════ CATEGORIES ════ -->
-<section class="cat-section" id="categories">
-  <div class="sec-label reveal fl">Explorar</div>
-  <h2 class="sec-h reveal d1">Nuestras <em>Categorías</em></h2>
-  <div class="cat-grid">
-    <a class="cat-card gold-cat reveal d1" href="#sweetorgasm">
-      <img src="https://drive.google.com/thumbnail?id=1wKEy2yNUhAfOITrKW15SemW9ARDWFW9E&sz=s800" alt="Sweet Orgasm" onerror="this.src='https://images.unsplash.com/photo-1541643600914-78b084683702?w=700&auto=format&fit=crop'"/>
-      <div class="cat-ov" style="background:linear-gradient(to top,rgba(7,5,10,.95),rgba(7,5,10,.2) 55%,transparent)"></div>
-      <div class="cat-body"><div class="cat-pill gold">Exclusivo</div><div class="cat-name">Sweet Orgasm</div></div>
-      <div class="cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
-    </a>
-    <a class="cat-card reveal d2" href="#products" onclick="filterP('Salud y Belleza',null)">
-      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=700&auto=format&fit=crop" alt="Salud y Belleza"/>
-      <div class="cat-ov"></div>
-      <div class="cat-body"><div class="cat-pill">Explorar</div><div class="cat-name">Salud y Belleza</div></div>
-      <div class="cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
-    </a>
-    <a class="cat-card reveal d3" href="#products" onclick="filterP('Maquillaje',null)">
-      <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=700&auto=format&fit=crop" alt="Maquillaje"/>
-      <div class="cat-ov"></div>
-      <div class="cat-body"><div class="cat-pill">Explorar</div><div class="cat-name">Maquillaje &amp; Cosméticos</div></div>
-      <div class="cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
-    </a>
-  </div>
-</section>
-
 <!-- ════ PRODUCTS REGULARES CON PAGINACIÓN ════ -->
 <section class="prod-section" id="products">
   <div class="sec-label reveal fl">Catálogo</div>
@@ -784,6 +786,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   </div>
   <div class="filter-row reveal d2" id="filterRow">
     <button class="flt on" onclick="filterP('Todos',this)">Todos</button>
+    <button class="flt" onclick="filterP('Sweet Zone',this)">The Sweet Zone</button>
     <button class="flt" onclick="filterP('Salud y Belleza',this)">Salud y Belleza</button>
     <button class="flt" onclick="filterP('Maquillaje',this)">Maquillaje</button>
   </div>
@@ -792,51 +795,6 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
   </div>
   <div class="pag-controls" id="prodPag" style="display:none"></div>
   <div class="p-empty" id="pEmpty">No se encontraron productos.</div>
-</section>
-
-<!-- ════ PROMO STRIP ════ -->
-<div class="promo-strip">
-  <div class="promo-left">
-    <div class="promo-tag">PRECIO MAYOREO</div>
-    <h2>Compra 200+ unidades.<br>Paga <em>$3.99</em> por cada una.</h2>
-    <p>El descuento se aplica automáticamente en tu carrito — sin códigos, sin complicaciones.</p>
-  </div>
-  <div class="promo-right">
-    <div class="promo-stat"><span class="ps-n">$4.99</span><span class="ps-l">1–199 uds</span></div>
-    <div class="promo-arrow">→</div>
-    <div class="promo-stat highlight"><span class="ps-n">$3.99</span><span class="ps-l">200+ uds</span></div>
-  </div>
-</div>
-
-<!-- ════ MAYOREO ════ -->
-<section class="reseller-section" id="mayoreo">
-  <div class="reseller-inner">
-    <div class="reseller-left reveal fl">
-      <div class="sec-label">Para revendedores</div>
-      <h2 class="sec-h">Haz crecer tu<br><em>negocio</em> con nosotros.</h2>
-      <p>The Sweet Zone es el proveedor que tu negocio necesita. Precios especiales de mayoreo, catálogo amplio y pedidos por WhatsApp sin complicaciones.</p>
-      <div class="reseller-steps">
-        <div class="rs-step"><div class="rs-num">01</div><div><strong>Elige tus productos</strong><p>Navega el catálogo y selecciona lo que quieres revender.</p></div></div>
-        <div class="rs-step"><div class="rs-num">02</div><div><strong>Agrega 200+ unidades</strong><p>El precio mayoreo se aplica automáticamente en el carrito.</p></div></div>
-        <div class="rs-step"><div class="rs-num">03</div><div><strong>Confirma por WhatsApp</strong><p>Recibe confirmación en menos de 24h y empieza a vender.</p></div></div>
-      </div>
-      <a href="https://wa.me/17864195886?text=Hola%2C%20quiero%20información%20sobre%20precios%20de%20mayoreo" target="_blank" class="btn-prim" style="margin-top:32px">Consultar mayoreo por WhatsApp</a>
-    </div>
-    <div class="reveal fr d1">
-      <div class="reseller-pricing-card">
-        <div class="rpc-tag">Comparativa de precios</div>
-        <div class="rpc-row header"><span>Cantidad</span><span>Precio c/u</span><span>Total 200 uds</span></div>
-        <div class="rpc-row"><span>1 – 199 uds</span><span class="rpc-price">$4.99</span><span class="rpc-total">$998.00</span></div>
-        <div class="rpc-row highlight"><span>200+ uds ✦</span><span class="rpc-price red">$3.99</span><span class="rpc-total red">$798.00</span></div>
-        <div class="rpc-savings">Ahorras <strong>$200</strong> por cada 200 unidades</div>
-        <div class="rpc-divider"></div>
-        <div><div class="rpb-label">Si vendes a $8 c/u (200 uds)</div>
-        <div class="rpb-row"><span>Inversión</span><span>$798.00</span></div>
-        <div class="rpb-row"><span>Ingresos</span><span>$1,600.00</span></div>
-        <div class="rpb-row profit"><span>Ganancia</span><span>$802.00</span></div></div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- ════ ABOUT ════ -->
@@ -931,7 +889,7 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
       <ul>
         <li><a href="#about">Nosotros</a></li>
         <li><a href="#contact">Contacto</a></li>
-        <li><a href="#mayoreo">Mayoreo</a></li>
+        <li><a href="#contact">Contacto</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1237,6 +1195,8 @@ function selectPay(btn,val){document.querySelectorAll('.pay-btn').forEach(b=>b.c
    DEMO FALLBACK
 ══════════════════════════ */
 const DEMO=[
+  {nombre:'Kit Cuidado Facial Sweet Zone',categoria:'Sweet Zone',sku:'TSZ-001',imagen:'https://drive.google.com/thumbnail?id=1i1ovW9Fn2jCkRfZZ2LLTn3SWiZ-z3_-0&sz=s400',badge:'hot',descripcion:'Kit completo de cuidado facial con limpiador, tónico y crema.'},
+  {nombre:'Set Facial Sweet Zone',categoria:'Sweet Zone',sku:'TSZ-002',imagen:'https://drive.google.com/thumbnail?id=1i1ovW9Fn2jCkRfZZ2LLTn3SWiZ-z3_-0&sz=s400',badge:'new',descripcion:'Set premium de cuidado facial para uso diario.'},
   {nombre:'LA Colors Corrector de Maquillaje, 0.13 oz',categoria:'Maquillaje',sku:'MQ-002',imagen:'https://images.unsplash.com/photo-1600428853876-fb5522a5d0d5?w=400&auto=format&fit=crop',badge:'hot',descripcion:'Logra un acabado impecable y natural.'},
   {nombre:'Base Hidratante Candy Moyo, 30 ml',categoria:'Maquillaje',sku:'MQ-003',imagen:'https://images.unsplash.com/photo-1631214524020-3c69a4a6f5f4?w=400&auto=format&fit=crop',badge:'',descripcion:'Dale a tu rostro un aspecto radiante.'},
   {nombre:'Barra de Contorno LA Colors',categoria:'Maquillaje',sku:'MQ-004',imagen:'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&auto=format&fit=crop',badge:'sale',descripcion:'Define y esculpe tus facciones.'},
@@ -1245,8 +1205,6 @@ const DEMO=[
   {nombre:'Pastillas HALLS Miel y Limón x14',categoria:'Salud y Belleza',sku:'SB-002',imagen:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&auto=format&fit=crop',badge:'hot',descripcion:'Alivia la irritación de la garganta.'},
   {nombre:'Ungüento Pectoral MED AID 4 oz',categoria:'Salud y Belleza',sku:'SB-003',imagen:'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&auto=format&fit=crop',badge:'',descripcion:'Recupera la sensación de bienestar.'},
   {nombre:'Suero Facial Multivitamínico',categoria:'Salud y Belleza',sku:'SB-009',imagen:'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&auto=format&fit=crop',badge:'',descripcion:'Dale a tu piel el impulso diario.'},
-  {nombre:'Toallitas Limpiadoras For Her',categoria:'Salud y Belleza',sku:'SB-004',imagen:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&auto=format&fit=crop',badge:'',descripcion:'Siéntete fresca y segura.'},
-  {nombre:'Solución Tonificante AHA Dermasil',categoria:'Salud y Belleza',sku:'SB-005',imagen:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&auto=format&fit=crop',badge:'sale',descripcion:'Renueva la textura de tu piel.'},
 ];
 
 /* ══════════════════════════
@@ -1273,9 +1231,11 @@ function parseCSV(txt){
   const cols={nombre:ci(['nombre','name','producto']),categoria:ci(['categoria','category','cat']),sku:ci(['sku','code','codigo']),imagen:ci(['imagen','image','img','foto','url']),badge:ci(['badge','etiqueta','tag']),desc:ci(['descripcion','description','desc'])};
   function normCat(v){
     const s=(v||'').toLowerCase();
-    if(s.includes('sweet')&&s.includes('orgasm'))return'_skip_premium_'; // no mezclar con regulares
+    // Solo skipear Sweet Orgasm (los perfumes premium), Sweet Zone es categoría normal
+    if(s.includes('orgasm'))return'_skip_premium_';
     if(s.includes('salud')||s.includes('belleza')||s.includes('health'))return'Salud y Belleza';
     if(s.includes('maquill')||s.includes('cosmet')||s.includes('makeup'))return'Maquillaje';
+    if(s.includes('sweet zone')||s.includes('sweetzone')||(s.includes('sweet')&&!s.includes('orgasm')))return'Sweet Zone';
     if(['Sweet Zone','Salud y Belleza','Maquillaje'].includes(v))return v;
     return v||'';
   }
