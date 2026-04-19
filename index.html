@@ -1079,7 +1079,7 @@ function getLocation(){
    CART
 ══════════════════════════ */
 let cart=[];
-function totalRegularUnits(){return cart.filter(i=>!i.isPremium).reduce((s,i)=>s+i.qty,0);}
+function totalRegularUnits(){return cart.filter(i=>!i.isPremium&&!i.isSweetZone).reduce((s,i)=>s+i.qty,0);}
 function isBulk(){return totalRegularUnits()>=CFG.BULK_MIN;}
 function pEachRegular(){return isBulk()?CFG.P_BULK:CFG.P_UNIT;}
 
@@ -1105,6 +1105,7 @@ function updateCart(){
   let total=0;
   cart.forEach(i=>{
     if(i.isPremium) total+=i.qty*(i.precio||CFG.P_FULL);
+    else if(i.isSweetZone) total+=i.qty*CFG.P_UNIT;
     else total+=i.qty*pe;
   });
   const units=cart.reduce((s,i)=>s+i.qty,0);
@@ -1120,14 +1121,15 @@ function updateCart(){
     ftr.style.display='none';if(fs)fs.style.display='none';return;
   }
   body.innerHTML=cart.map((item,idx)=>{
-    const itemPrice=item.isPremium?(item.precio||CFG.P_FULL):pe;
-    const presets=item.isPremium?[1,2,3]:[1,100,200,400];
-    const borderStyle=item.isPremium?'border-color:rgba(201,168,76,.3)':'';
+    const itemPrice=item.isPremium?(item.precio||CFG.P_FULL):item.isSweetZone?CFG.P_UNIT:pe;
+    const presets=item.isPremium||item.isSweetZone?[1,2,3]:[1,100,200,400];
+    const borderStyle=item.isPremium?'border-color:rgba(201,168,76,.3)':item.isSweetZone?'border-color:rgba(201,168,76,.15)':'';
+    const metaLabel=item.isPremium?'✦ Sweet Orgasm':item.isSweetZone?'✦ The Sweet Zone':item.categoria;
     return `<div class="c-item" style="${borderStyle}">
       <img class="c-item-img" src="${item.imagen||''}" alt="${item.nombre}" onerror="this.style.display='none'"/>
       <div class="c-item-info">
         <div class="c-item-name">${item.nombre}</div>
-        <div class="c-item-meta" style="${item.isPremium?'color:var(--GOLD)':''}">${item.isPremium?'✦ Sweet Orgasm':item.categoria}${item.sku?' · '+item.sku:''}</div>
+        <div class="c-item-meta" style="${item.isPremium||item.isSweetZone?'color:var(--GOLD)':''}">${metaLabel}${item.sku?' · '+item.sku:''}</div>
         <div class="c-item-price">$${(item.qty*itemPrice).toFixed(2)} · ${item.qty} ud${item.qty>1?'s':''}</div>
         <div class="c-qty">
           ${presets.map(p=>`<button class="qty-preset${item.qty===p?' active':''}" onclick="changePreset(${idx},${p})">${p}</button>`).join('')}
@@ -1167,7 +1169,7 @@ document.getElementById('btnWaOrder').addEventListener('click',()=>{
   
   const pe=pEachRegular();
   let total=0;
-  cart.forEach(i=>{total+=i.isPremium?i.qty*(i.precio||CFG.P_FULL):i.qty*pe;});
+  cart.forEach(i=>{total+=i.isPremium?i.qty*(i.precio||CFG.P_FULL):i.isSweetZone?i.qty*CFG.P_UNIT:i.qty*pe;});
   const bulk=isBulk();
   const regularUnits=totalRegularUnits();
   const savings=bulk?((CFG.P_UNIT-CFG.P_BULK)*regularUnits).toFixed(2):null;
@@ -1181,7 +1183,7 @@ document.getElementById('btnWaOrder').addEventListener('click',()=>{
     `📦 *Entrega:* ${envioVal==='delivery'?'Con envío'+(direccion?' — '+direccion:''):'Retiro en tienda'}`,
     userLocation?`📍 *Ubicación:* ${userLocation}`:'',
     `💳 *Pago:* ${pago}`,'','🛒 *Productos:*',
-    ...cart.map((i,idx)=>`  ${idx+1}. ${i.nombre}${i.sku?' ('+i.sku+')':''} × ${i.qty} ud${i.qty>1?'s':''} = $${(i.qty*(i.isPremium?(i.precio||CFG.P_FULL):pe)).toFixed(2)}${i.isPremium?' ✦':''}`),
+    ...cart.map((i,idx)=>`  ${idx+1}. ${i.nombre}${i.sku?' ('+i.sku+')':''} × ${i.qty} ud${i.qty>1?'s':''} = $${(i.qty*(i.isPremium?(i.precio||CFG.P_FULL):i.isSweetZone?CFG.P_UNIT:pe)).toFixed(2)}${i.isPremium||i.isSweetZone?' ✦':''}`),
     '','━━━━━━━━━━━━━━━━━━━━━━',
     regularUnits>0?`💲 Precio regular c/u: $${pe.toFixed(2)}${bulk?' (mayoreo ✓)':''}`:null,
     bulk?`✅ Ahorro mayoreo: $${savings}`:regularUnits>0?`💡 Faltan ${CFG.BULK_MIN-regularUnits} uds para mayoreo`:null,
@@ -1330,9 +1332,8 @@ function renderSweetZoneGrid(){
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:4px">
           <div>
             <div class="pm-cat-price">$${CFG.P_UNIT.toFixed(2)}</div>
-            <div style="font-size:.62rem;color:var(--GOLD2);margin-top:2px">200+ uds: $${CFG.P_BULK.toFixed(2)}</div>
           </div>
-          <button class="pm-cat-add" onclick="event.stopPropagation();addToCart(allProducts[${gIdx>=0?gIdx:0}],1)">
+          <button class="pm-cat-add" onclick="event.stopPropagation();addToCart({...allProducts[${gIdx>=0?gIdx:0}],isSweetZone:true,precio:${CFG.P_UNIT}},1)">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             Agregar
           </button>
@@ -1521,6 +1522,11 @@ function _openModal(p,isPremium){
     document.getElementById('pdPriceUnit').textContent='$'+p.precio.toFixed(2);
     document.getElementById('pdPriceBulkBlock').style.display='none';
     document.getElementById('pdPresets').innerHTML='<button onclick="pdSetQty(1)">×1</button><button onclick="pdSetQty(2)">×2</button><button onclick="pdSetQty(3)">×3</button>';
+  }else if(p.isSweetZone||p.categoria==='Sweet Zone'){
+    // Sweet Zone: precio fijo $4.99, sin mayoreo
+    document.getElementById('pdPriceUnit').textContent='$'+CFG.P_UNIT.toFixed(2);
+    document.getElementById('pdPriceBulkBlock').style.display='none';
+    document.getElementById('pdPresets').innerHTML='<button onclick="pdSetQty(1)">×1</button><button onclick="pdSetQty(2)">×2</button><button onclick="pdSetQty(5)">×5</button><button onclick="pdSetQty(10)">×10</button>';
   }else{
     document.getElementById('pdPriceUnit').textContent='$'+CFG.P_UNIT.toFixed(2);
     document.getElementById('pdPriceBulkBlock').style.display='flex';
@@ -1554,6 +1560,8 @@ function pdUpdSub(){
   let pe,extra='';
   if(pdIsPremium){
     pe=pdProd.precio||CFG.P_FULL;
+  }else if(pdProd&&pdProd.isSweetZone){
+    pe=CFG.P_UNIT; // precio fijo, sin mayoreo
   }else{
     const bulk=pdQtyVal>=CFG.BULK_MIN;
     pe=bulk?CFG.P_BULK:CFG.P_UNIT;
@@ -1565,7 +1573,10 @@ function pdUpdSub(){
 
 function pdAddToCart(){
   if(!pdProd)return;
-  const prod=pdIsPremium?{...pdProd,isPremium:true}:pdProd;
+  let prod;
+  if(pdIsPremium) prod={...pdProd,isPremium:true};
+  else if(pdProd.isSweetZone) prod={...pdProd,isSweetZone:true};
+  else prod=pdProd;
   addToCart(prod,pdQtyVal);
   closePD();
 }
