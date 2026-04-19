@@ -763,12 +763,12 @@ body.ch .cur-o{width:46px;height:46px;background:rgba(200,39,45,.08)}
     </div>
   </div>
 
-  <!-- PREMIUM CATALOG — CATEGORY CARD STYLE -->
+  <!-- SWEET ZONE CATALOG — productos del CSV con fotos reales -->
   <div class="premium-catalog" id="premiumCatalog">
-    <div class="sec-label gold-label reveal">Colección Completa</div>
-    <h3 class="sec-h reveal d1" style="font-size:clamp(1.8rem,3.2vw,3rem)">Elige tu <em class="gold">fragancia</em></h3>
+    <div class="sec-label gold-label reveal">Colección The Sweet Zone</div>
+    <h3 class="sec-h reveal d1" style="font-size:clamp(1.8rem,3.2vw,3rem)">Nuestros <em class="gold">productos</em></h3>
     <div class="pm-cat-grid" id="premiumGrid">
-      <!-- Rendered by JS -->
+      <!-- Rendered by JS desde CSV -->
     </div>
     <div class="pag-controls" id="premiumPag" style="display:none"></div>
   </div>
@@ -1291,27 +1291,48 @@ function parseCSV(txt){
 }
 
 /* ══════════════════════════
-   RENDER PREMIUM — category card style
+   RENDER SWEET ZONE PRODUCTS — usa CSV, misma lógica que productos regulares
+   Se llama desde iniciar() y de nuevo cuando el CSV carga
 ══════════════════════════ */
-function renderPremium(){
-  const grid=document.getElementById('premiumGrid');
-  const FALLBACK='https://images.unsplash.com/photo-1541643600914-78b084683702?w=800&auto=format&fit=crop';
-  grid.innerHTML=PREMIUM_PRODUCTS.map((p,i)=>{
-    const typeLabel=p.tipo==='travel'?'Travel Size':'Presentación Completa';
-    const imgSrc=p.imagen||FALLBACK;
-    return `<div class="pm-cat-card reveal d${(i%2)+1}" onclick="openPDFull(PREMIUM_PRODUCTS[${i}])">
+let sweetZoneProducts = []; // se llena desde CSV
+
+function renderSweetZoneGrid(){
+  const grid = document.getElementById('premiumGrid');
+  if(!grid) return;
+
+  const FALLBACK = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&auto=format&fit=crop';
+  const prods = sweetZoneProducts;
+
+  if(!prods.length){
+    grid.innerHTML = '<p style="color:rgba(255,255,255,.4);font-size:.88rem;padding:24px 0">Cargando productos…</p>';
+    return;
+  }
+
+  grid.innerHTML = prods.map((p,i)=>{
+    const bv = (p.badge||'').toLowerCase();
+    const bl = bv==='new'?'NUEVO':bv==='hot'?'HOT':'OFERTA';
+    const badge = (bv==='new'||bv==='hot'||bv==='sale')
+      ? `<span class="badge badge-${bv}" style="position:absolute;top:14px;left:14px;z-index:2">${bl}</span>` : '';
+    const imgSrc = p.imagen || FALLBACK;
+    const gIdx = allProducts.indexOf(p);
+
+    return `<div class="pm-cat-card reveal d${(i%2)+1}" onclick="openPD(allProducts[${gIdx>=0?gIdx:0}])" style="position:relative">
+      ${badge}
       <div class="pm-cat-card-img">
         <img src="${imgSrc}" alt="${p.nombre}" loading="lazy" onerror="imgFallback(this,'${FALLBACK}')"/>
         <div class="pm-cat-card-ov"></div>
       </div>
       <div class="pm-cat-arrow"><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
       <div class="pm-cat-card-body">
-        <div class="pm-cat-type">✦ ${typeLabel}</div>
+        <div class="pm-cat-type">✦ The Sweet Zone</div>
         <div class="pm-cat-name">${p.nombre}</div>
         <div class="pm-cat-desc">${p.descripcion||''}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:4px">
-          <div class="pm-cat-price">$${p.precio.toFixed(2)}</div>
-          <button class="pm-cat-add" onclick="event.stopPropagation();addToCart({...PREMIUM_PRODUCTS[${i}],isPremium:true},1)">
+          <div>
+            <div class="pm-cat-price">$${CFG.P_UNIT.toFixed(2)}</div>
+            <div style="font-size:.62rem;color:var(--GOLD2);margin-top:2px">200+ uds: $${CFG.P_BULK.toFixed(2)}</div>
+          </div>
+          <button class="pm-cat-add" onclick="event.stopPropagation();addToCart(allProducts[${gIdx>=0?gIdx:0}],1)">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             Agregar
           </button>
@@ -1319,7 +1340,15 @@ function renderPremium(){
       </div>
     </div>`;
   }).join('');
+
   observeReveals();
+}
+
+// Alias para compatibilidad — se llama en iniciar()
+function renderPremium(){
+  // Sweet Orgasm (hardcoded) ya no se renderiza aquí
+  // Este div ahora muestra Sweet Zone del CSV
+  renderSweetZoneGrid();
 }
 
 /* ══════════════════════════
@@ -1545,10 +1574,13 @@ function pdAddToCart(){
    CARGA GOOGLE SHEET
 ══════════════════════════ */
 (function iniciar(){
+  // Mostrar demo en productos regulares inmediatamente
   allProducts=DEMO;
   filteredProducts=DEMO;
+  // Sweet Zone demo: usar los 2 del DEMO
+  sweetZoneProducts = DEMO.filter(p=>p.categoria==='Sweet Zone');
   applyFilters();
-  renderPremium();
+  renderPremium(); // muestra Sweet Zone del demo hasta que cargue el CSV
 
   const base=CFG.SHEET_CSV+'&nocache='+Date.now();
   const proxies=[
@@ -1568,17 +1600,22 @@ function pdAddToCart(){
         if(prods.length===0)throw new Error('Sin productos');
         allProducts=prods;
         filteredProducts=prods;
-        // DEBUG: mostrar imágenes en consola para verificar
-        const sweetZoneProds=prods.filter(p=>p.categoria==='Sweet Zone');
-        console.log('[TSZ] Sweet Zone products:',sweetZoneProds.length);
-        sweetZoneProds.slice(0,5).forEach(p=>console.log(' →',p.nombre,'|',p.imagen||'SIN IMAGEN'));
+
+        // Extraer productos Sweet Zone para el grid de la sección especial
+        sweetZoneProducts = prods.filter(p=>p.categoria==='Sweet Zone');
+        console.log('[TSZ] Sweet Zone:',sweetZoneProducts.length,'productos');
+        sweetZoneProducts.slice(0,5).forEach(p=>console.log(' →',p.nombre,'| img:',p.imagen||'SIN IMAGEN'));
+
+        // Actualizar el grid de Sweet Zone con fotos reales del CSV
+        renderPremium();
+
         applyFilters();
         const hc=document.getElementById('heroStatCount');
         if(hc)hc.textContent=allProducts.length+'+';
         setSyncLive(allProducts.length+' productos sincronizados ✓');
         console.log('[TSZ] ✅',allProducts.length,'productos cargados');
       })
-      .catch(err=>{console.warn('[TSZ] Proxy',idx,'falló:',err.message);intentar();});
+      .catch(err=>{console.warn('[TSZ] Proxy',idx,'falló:',err.message);intentar();});;
   }
   setTimeout(intentar,300);
 })();
