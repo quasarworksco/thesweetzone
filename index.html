@@ -311,11 +311,118 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 .cart-veil.open{opacity:1;pointer-events:all}
 .cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(500px,100vw);background:var(--B2);z-index:1001;border-left:1px solid rgba(200,39,45,.18);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .45s var(--ease)}
 .cart-drawer.open{transform:translateX(0)}
-.cd-hdr{padding:18px 20px;border-bottom:1px solid var(--B4);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.cd-hdr h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
-.cd-close{background:var(--B4);border:none;width:32px;height:32px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+
+/* STEPPER HEADER */
+.cd-hdr{padding:14px 18px;border-bottom:1px solid var(--B4);display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.cd-hdr-top{display:flex;align-items:center;justify-content:space-between}
+.cd-hdr h3{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;line-height:1}
+
+/* STEP INDICATOR */
+.step-indicator{display:flex;align-items:center;gap:0}
+.step-pip{display:flex;align-items:center;gap:6px;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#444;transition:color .3s}
+.step-pip.on{color:var(--W2)}
+.step-pip.done{color:var(--R2)}
+.step-circle{width:22px;height:22px;border-radius:50%;border:1.5px solid #333;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.58rem;font-weight:700;transition:all .3s;flex-shrink:0;color:#444}
+.step-pip.on .step-circle{border-color:var(--R);background:var(--R);color:#fff}
+.step-pip.done .step-circle{border-color:var(--R2);background:transparent;color:var(--R2)}
+.step-line{width:28px;height:1px;background:#222;margin:0 4px;flex-shrink:0;transition:background .3s}
+.step-line.done{background:var(--R2)}
+.step-label{display:none}
+@media(min-width:380px){.step-label{display:inline}}
+.cd-close{background:var(--B4);border:none;width:32px;height:32px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
 .cd-close:hover{background:var(--R)}
 .cd-close svg{width:14px;height:14px;fill:var(--W)}
+
+/* STEP PANELS */
+.cd-step{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.cd-step.hidden{display:none}
+
+/* STEP 1 — PRODUCTS */
+.cd-products{flex:1;overflow-y:auto;padding:12px 15px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+.cd-products::-webkit-scrollbar{width:3px}.cd-products::-webkit-scrollbar-thumb{background:var(--R3)}
+.cd-empty{text-align:center;padding:52px 0;color:#555}
+.cd-empty svg{width:48px;height:48px;fill:var(--B4);margin-bottom:11px;display:block;margin-left:auto;margin-right:auto}
+.cd-empty p{font-size:.78rem;line-height:1.6}
+
+/* product card in cart */
+.c-item{background:var(--B3);border-radius:8px;border:1px solid var(--B4);overflow:hidden;transition:border-color .2s}
+.c-item:hover{border-color:rgba(200,39,45,.22)}
+.c-item-top{display:flex;gap:10px;padding:10px 12px 8px}
+.ci-img{width:60px;height:60px;object-fit:cover;border-radius:5px;background:var(--B4);flex-shrink:0}
+.ci-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.ci-name{font-size:.8rem;font-weight:600;color:var(--W2);line-height:1.3;margin-bottom:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci-meta{font-size:.6rem;color:#555;margin-bottom:3px}
+.ci-price{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--W);font-weight:700}
+.ci-del{background:none;border:none;cursor:pointer;color:#444;transition:color .2s;padding:2px;flex-shrink:0;align-self:flex-start}
+.ci-del:hover{color:var(--R2)}
+.ci-del svg{width:13px;height:13px;fill:currentColor;display:block}
+.c-item-bottom{display:flex;align-items:center;justify-content:space-between;padding:6px 12px 9px;border-top:1px solid var(--B4);background:var(--B4)}
+.ci-qty{display:flex;align-items:center;gap:5px}
+.ciq-btn{width:26px;height:26px;background:var(--B5);border:none;border-radius:4px;cursor:pointer;color:var(--W2);font-size:.82rem;font-weight:700;transition:background .2s;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif}
+.ciq-btn:hover{background:var(--R)}
+.ciq-val{font-family:'Space Mono',monospace;font-size:.76rem;min-width:28px;text-align:center;color:var(--W)}
+.ci-unit-price{font-size:.62rem;color:#555;font-family:'Space Mono',monospace}
+
+/* step 1 footer */
+.cd-step1-ftr{padding:12px 15px;border-top:1px solid var(--B4);flex-shrink:0;background:var(--B2)}
+.cd-totals{margin-bottom:12px}
+.cd-row{display:flex;justify-content:space-between;font-size:.72rem;color:var(--W3);padding:3px 0}
+.cd-row.total{font-size:.95rem;color:var(--W2);font-weight:700;border-top:1px solid var(--B4);padding-top:9px;margin-top:5px}
+.cd-row.total span:last-child{font-family:'Space Mono',monospace;color:var(--W)}
+.btn-continue{width:100%;padding:13px;background:var(--R);color:var(--W);border:none;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;border-radius:4px;cursor:pointer;animation:redGlow 3s ease-in-out infinite;display:flex;align-items:center;justify-content:center;gap:9px;transition:background .2s,transform .15s}
+.btn-continue:hover{background:var(--R2);transform:translateY(-1px)}
+.btn-continue svg{width:14px;height:14px;fill:var(--W)}
+.whl-badge{display:none;font-size:.64rem;color:var(--R2);text-align:center;margin-bottom:8px;font-weight:600}
+.whl-badge.show{display:block}
+.whl-progress{margin-bottom:10px;display:none}
+.whl-progress.show{display:block}
+.whl-progress-label{font-size:.6rem;color:#555;margin-bottom:4px;display:flex;justify-content:space-between}
+.whl-progress-bar{height:3px;background:var(--B4);border-radius:2px;overflow:hidden}
+.whl-progress-fill{height:100%;background:var(--R);border-radius:2px;transition:width .4s var(--ease)}
+
+/* STEP 2 — CHECKOUT FORM */
+.cd-checkout{flex:1;overflow-y:auto;padding:14px 15px;-webkit-overflow-scrolling:touch}
+.cd-checkout::-webkit-scrollbar{width:3px}.cd-checkout::-webkit-scrollbar-thumb{background:var(--R3)}
+.co-order-mini{background:var(--B3);border:1px solid var(--B4);border-radius:6px;padding:12px 13px;margin-bottom:14px}
+.co-order-mini-title{font-size:.58rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:8px}
+.co-mini-row{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.co-mini-row:last-of-type{border-bottom:none}
+.co-mini-img{width:32px;height:32px;object-fit:cover;border-radius:3px;background:var(--B4);flex-shrink:0}
+.co-mini-name{font-size:.73rem;font-weight:600;color:var(--W2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.co-mini-qty{font-size:.65rem;color:var(--W3);flex-shrink:0}
+.co-mini-price{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--W);flex-shrink:0}
+.co-mini-total{display:flex;justify-content:space-between;align-items:center;padding-top:8px;margin-top:4px;border-top:1px solid var(--B4)}
+.co-mini-total span:first-child{font-size:.65rem;color:#555;text-transform:uppercase;letter-spacing:1px}
+.co-mini-total span:last-child{font-family:'Space Mono',monospace;font-size:.9rem;color:var(--W);font-weight:700}
+.co-sec-label{font-size:.56rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--R2);font-weight:700;margin:14px 0 8px}
+.co-sec-label:first-child{margin-top:0}
+.co-field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+@media(max-width:380px){.co-field-row{grid-template-columns:1fr}}
+.cff{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
+.cff label{font-size:.56rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--W3);font-weight:600}
+.cff input,.cff select{background:var(--B3);border:1px solid var(--B4);border-bottom:2px solid var(--B4);padding:9px 11px;color:var(--W2);font-family:'Outfit',sans-serif;font-size:.82rem;border-radius:4px;outline:none;width:100%;transition:border-color .2s}
+.cff input:focus,.cff select:focus{border-bottom-color:var(--R)}
+.cff input::placeholder{color:#444}
+.cff select option{background:var(--B2)}
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px}
+.pay-opt{padding:10px;background:var(--B3);border:1.5px solid var(--B4);border-radius:6px;cursor:pointer;font-size:.75rem;color:var(--W3);transition:all .2s;font-family:'Outfit',sans-serif;font-weight:500;text-align:center}
+.pay-opt:hover{border-color:var(--B5);color:var(--W2)}
+.pay-opt.sel{border-color:var(--R);background:rgba(200,39,45,.1);color:var(--W2)}
+.loc-btn{width:100%;padding:9px;background:var(--B3);border:1.5px solid rgba(200,39,45,.26);border-radius:4px;color:var(--R2);font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:6px;transition:all .2s}
+.loc-btn:hover{background:rgba(200,39,45,.1);border-color:var(--R)}
+.loc-btn svg{width:12px;height:12px;fill:currentColor}
+.loc-result{font-size:.62rem;color:#555;padding:4px 8px;background:var(--B4);border-radius:3px;display:none;word-break:break-all;margin-bottom:6px}
+.loc-result.show{display:block}
+.delivery-note{background:rgba(200,39,45,.07);border:1px solid rgba(200,39,45,.15);border-radius:4px;padding:8px 11px;font-size:.67rem;color:var(--W3);line-height:1.6;margin:10px 0;display:flex;gap:8px;align-items:flex-start}
+.delivery-note svg{width:12px;height:12px;fill:var(--R2);flex-shrink:0;margin-top:2px}
+.cd-step2-ftr{padding:12px 15px;border-top:1px solid var(--B4);flex-shrink:0;background:var(--B2)}
+.btn-wa-order{width:100%;padding:13px;background:var(--R);color:var(--W);border:none;font-family:'Outfit',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:4px;cursor:pointer;animation:redGlow 3s ease-in-out infinite;display:flex;align-items:center;justify-content:center;gap:9px;transition:background .2s,transform .15s}
+.btn-wa-order:hover{background:var(--R2);transform:translateY(-1px)}
+.btn-wa-order svg{width:15px;height:15px;fill:var(--W)}
+.btn-back{width:100%;padding:10px;background:transparent;border:1px solid var(--B5);color:var(--W3);font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:4px;cursor:pointer;margin-top:7px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.btn-back:hover{border-color:var(--W3);color:var(--W2)}
+.btn-back svg{width:12px;height:12px;fill:currentColor}
+.cart-note{font-size:.6rem;color:#555;text-align:center;margin-top:7px}
 .cd-whl{margin:10px 14px 0;padding:9px 13px;background:rgba(200,39,45,.1);border:1px solid rgba(200,39,45,.26);border-radius:4px;font-size:.7rem;color:var(--W);display:none;align-items:center;gap:8px}
 .cd-whl.show{display:flex}
 .cd-whl svg{width:12px;height:12px;fill:var(--R2);flex-shrink:0}
@@ -899,36 +1006,101 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 <!-- CART DRAWER -->
 <div class="cart-veil" id="cartVeil" onclick="closeCart()"></div>
 <div class="cart-drawer" id="cartDrawer">
-  <div class="cd-hdr"><h3>Tu Carrito</h3><button class="cd-close" onclick="closeCart()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
-  <div class="cd-whl" id="cdWhl"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>¡Precio mayoreo activo! 200+ uds = <strong style="color:var(--W);margin-left:4px">$3.99 c/u</strong></div>
-  <div class="cd-body" id="cdBody"></div>
-  <!-- FORM -->
-  <div class="cart-form" id="cartForm" style="display:none">
-    <div class="cff-title">Datos del Pedido</div>
-    <div class="cff-row">
-      <div class="cff"><label>Nombre *</label><input type="text" id="cfNombre" placeholder="María"/></div>
-      <div class="cff"><label>Apellido *</label><input type="text" id="cfApellido" placeholder="López"/></div>
+
+  <!-- HEADER with stepper -->
+  <div class="cd-hdr">
+    <div class="cd-hdr-top">
+      <h3 id="cdTitle">Tu Carrito</h3>
+      <button class="cd-close" onclick="closeCart()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
     </div>
-    <div class="cff"><label>Teléfono *</label><input type="tel" id="cfTel" placeholder="+1 (786) 000-0000"/></div>
-    <div class="cff"><label>Correo electrónico</label><input type="email" id="cfEmail" placeholder="tu@correo.com"/></div>
-    <div class="cff"><label>Dirección / Ciudad</label><input type="text" id="cfDir" placeholder="Ciudad, estado o dirección…"/></div>
-    <button class="loc-btn" onclick="getLocation()" id="locBtn"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Compartir ubicación exacta</button>
-    <div class="loc-result" id="locResult"></div>
-    <div class="cff" style="margin-bottom:6px"><label>Método de Pago *</label></div>
-    <div class="pay-methods">
-      <button class="pay-opt" onclick="selPay(this,'Zelle')">💳 Zelle</button>
-      <button class="pay-opt" onclick="selPay(this,'Binance')">₿ Binance</button>
-      <button class="pay-opt" onclick="selPay(this,'Efectivo')">💵 Efectivo</button>
-      <button class="pay-opt" onclick="selPay(this,'Pago Móvil')">📱 Pago Móvil</button>
+    <div class="step-indicator">
+      <div class="step-pip on" id="pip1">
+        <div class="step-circle">1</div>
+        <span class="step-label" style="margin-left:5px;font-size:.58rem;letter-spacing:1px">Productos</span>
+      </div>
+      <div class="step-line" id="stepLine"></div>
+      <div class="step-pip" id="pip2">
+        <div class="step-circle">2</div>
+        <span class="step-label" style="margin-left:5px;font-size:.58rem;letter-spacing:1px">Datos &amp; Pago</span>
+      </div>
     </div>
-    <input type="hidden" id="cfPago" value=""/>
-    <div class="delivery-note"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span>Pedidos mayoristas tienen plazo de entrega de <strong style="color:var(--W)">25 a 30 días hábiles</strong>.</span></div>
   </div>
-  <div class="cart-ftr" id="cartFtr" style="display:none">
-    <div id="cdSummary"></div>
-    <button class="btn-wa-order" onclick="sendOrder()"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Enviar Pedido por WhatsApp</button>
-    <p class="cart-note">Te contactaremos para confirmar pago y entrega.</p>
+
+  <!-- ═══ STEP 1: PRODUCTS ═══ -->
+  <div class="cd-step" id="cdStep1">
+    <div class="cd-whl" id="cdWhl">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+      ¡Mayoreo activo! Precio: <strong style="color:var(--W);margin-left:4px">$3.99 c/u</strong>
+    </div>
+    <div class="cd-products" id="cdBody"></div>
+    <div class="cd-step1-ftr" id="cdStep1Ftr" style="display:none">
+      <div class="whl-progress" id="whlProgress">
+        <div class="whl-progress-label"><span id="whlMsg"></span><span id="whlPct"></span></div>
+        <div class="whl-progress-bar"><div class="whl-progress-fill" id="whlFill"></div></div>
+      </div>
+      <div class="cd-totals" id="cdSummary"></div>
+      <button class="btn-continue" onclick="goStep2()">
+        Continuar con mis datos
+        <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+    </div>
   </div>
+
+  <!-- ═══ STEP 2: CHECKOUT ═══ -->
+  <div class="cd-step hidden" id="cdStep2">
+    <div class="cd-checkout">
+
+      <!-- mini order summary -->
+      <div class="co-order-mini">
+        <div class="co-order-mini-title">Resumen del pedido</div>
+        <div id="coMiniList"></div>
+        <div class="co-mini-total" id="coMiniTotal"></div>
+      </div>
+
+      <!-- personal data -->
+      <div class="co-sec-label">Tus datos</div>
+      <div class="co-field-row">
+        <div class="cff"><label>Nombre *</label><input type="text" id="cfNombre" placeholder="María"/></div>
+        <div class="cff"><label>Apellido *</label><input type="text" id="cfApellido" placeholder="López"/></div>
+      </div>
+      <div class="cff"><label>Teléfono *</label><input type="tel" id="cfTel" placeholder="+1 (786) 000-0000"/></div>
+      <div class="cff"><label>Correo electrónico</label><input type="email" id="cfEmail" placeholder="tu@correo.com"/></div>
+      <div class="cff"><label>Dirección / Ciudad</label><input type="text" id="cfDir" placeholder="Ciudad, estado o dirección…"/></div>
+      <button class="loc-btn" onclick="getLocation()" id="locBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Compartir ubicación exacta
+      </button>
+      <div class="loc-result" id="locResult"></div>
+
+      <!-- payment -->
+      <div class="co-sec-label">Método de pago *</div>
+      <div class="pay-methods">
+        <button class="pay-opt" onclick="selPay(this,'Zelle')">💳 Zelle</button>
+        <button class="pay-opt" onclick="selPay(this,'Binance')">₿ Binance</button>
+        <button class="pay-opt" onclick="selPay(this,'Efectivo')">💵 Efectivo</button>
+        <button class="pay-opt" onclick="selPay(this,'Pago Móvil')">📱 Pago Móvil</button>
+      </div>
+      <input type="hidden" id="cfPago" value=""/>
+
+      <div class="delivery-note">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <span>Pedidos mayoristas: plazo de entrega <strong style="color:var(--W)">25–30 días hábiles</strong> desde confirmación de pago.</span>
+      </div>
+    </div>
+
+    <div class="cd-step2-ftr">
+      <button class="btn-wa-order" onclick="sendOrder()">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar Pedido por WhatsApp
+      </button>
+      <button class="btn-back" onclick="goStep1()">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Volver al carrito
+      </button>
+      <p class="cart-note">Te contactaremos para confirmar pago y entrega.</p>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -1444,38 +1616,119 @@ function updateCartUI(){
   const units=totalUnits(),w=isWholesale(),total=cartTotal();
   document.getElementById('cartBadge').textContent=units;
   document.getElementById('cdWhl').className='cd-whl'+(w?' show':'');
-  const body=document.getElementById('cdBody'),ftr=document.getElementById('cartFtr'),form=document.getElementById('cartForm');
+
+  const body=document.getElementById('cdBody');
+  const ftr=document.getElementById('cdStep1Ftr');
+
   if(!cart.length){
     body.innerHTML=`<div class="cd-empty"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h11v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H18c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0022.46 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><p>Tu carrito está vacío.<br>¡Agrega productos!</p></div>`;
-    ftr.style.display='none';form.style.display='none';return;
+    if(ftr) ftr.style.display='none';
+    return;
   }
-  body.innerHTML=cart.map((item,idx)=>`<div class="c-item">
-    ${item.imagen?`<img class="ci-img" src="${esc(item.imagen)}" alt="${esc(item.nombre)}" onerror="fallbackImg(this)"/>`:'<div class="ci-img"></div>'}
-    <div class="ci-info">
-      <div class="ci-name">${esc(item.nombre)}</div>
-      <div class="ci-meta">${esc(item.categoria||'')}${item.sku?' · '+esc(item.sku):''}</div>
-      <div class="ci-price">$${(item.qty*priceEach(item)).toFixed(2)} · ${item.qty} ud${item.qty!==1?'s':''}</div>
-      <div class="ci-qty">
-        <button class="ciq-btn" onclick="changeQty(${idx},-10)">−10</button>
-        <button class="ciq-btn" onclick="changeQty(${idx},-1)">−1</button>
-        <span class="ciq-val">${item.qty}</span>
-        <button class="ciq-btn" onclick="changeQty(${idx},+1)">+1</button>
-        <button class="ciq-btn" onclick="changeQty(${idx},+10)">+10</button>
-      </div>
-    </div>
-    <button class="ci-del" onclick="removeItem(${idx})"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-  </div>`).join('');
 
+  // Render product cards — two-part layout: image+info top, qty controls bottom
+  body.innerHTML=cart.map((item,idx)=>{
+    const pe=priceEach(item);
+    return `<div class="c-item">
+      <div class="c-item-top">
+        ${item.imagen?`<img class="ci-img" src="${esc(item.imagen)}" alt="${esc(item.nombre)}" onerror="fallbackImg(this)"/>`:'<div class="ci-img" style="background:var(--B5);border-radius:5px"></div>'}
+        <div class="ci-info">
+          <div class="ci-name">${esc(item.nombre)}</div>
+          <div class="ci-meta">${esc(item.categoria||'')}${item.sku?' · '+esc(item.sku):''}</div>
+          <div class="ci-price">$${(item.qty*pe).toFixed(2)} <span style="color:#555;font-size:.6rem">· ${item.qty} ud${item.qty!==1?'s':''} × $${pe.toFixed(2)}</span></div>
+        </div>
+        <button class="ci-del" onclick="removeItem(${idx})"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+      </div>
+      <div class="c-item-bottom">
+        <div class="ci-qty">
+          <button class="ciq-btn" onclick="changeQty(${idx},-10)" title="−10">−10</button>
+          <button class="ciq-btn" onclick="changeQty(${idx},-1)" title="−1">−1</button>
+          <span class="ciq-val">${item.qty}</span>
+          <button class="ciq-btn" onclick="changeQty(${idx},+1)" title="+1">+1</button>
+          <button class="ciq-btn" onclick="changeQty(${idx},+10)" title="+10">+10</button>
+        </div>
+        <div class="ci-unit-price">$${pe.toFixed(2)}/ud</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Wholesale progress bar
+  const prog=document.getElementById('whlProgress');
+  const fill=document.getElementById('whlFill');
+  const msg=document.getElementById('whlMsg');
+  const pct=document.getElementById('whlPct');
+  if(prog){
+    if(!w){
+      prog.className='whl-progress show';
+      const remain=CFG.WHL_MIN-units;
+      const percent=Math.min(100,Math.round(units/CFG.WHL_MIN*100));
+      msg.textContent='Faltan '+remain+' uds para precio mayoreo';
+      pct.textContent=percent+'%';
+      fill.style.width=percent+'%';
+    } else {
+      prog.className='whl-progress show';
+      msg.textContent='✦ Precio mayoreo activo — $'+CFG.P_WHOLESALE.toFixed(2)+' c/u';
+      pct.textContent='';
+      fill.style.width='100%';
+      fill.style.background='var(--R2)';
+    }
+  }
+
+  // Summary
   document.getElementById('cdSummary').innerHTML=`
     <div class="cd-row"><span>Total unidades</span><span>${units}</span></div>
-    <div class="cd-row"><span>Precio c/u</span><span>${w?'$'+CFG.P_WHOLESALE.toFixed(2)+' (mayoreo)':'$'+CFG.P_UNIT.toFixed(2)}</span></div>
-    ${!w?`<div class="cd-row" style="color:var(--R2);font-size:.68rem"><span>Faltan ${CFG.WHL_MIN-units} uds para mayoreo</span></div>`:''}
+    <div class="cd-row"><span>Precio c/u</span><span style="${w?'color:var(--R2)':''}">${w?'$'+CFG.P_WHOLESALE.toFixed(2)+' mayoreo':'$'+CFG.P_UNIT.toFixed(2)}</span></div>
     <div class="cd-row total"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
-  ftr.style.display='block';form.style.display='block';
+
+  if(ftr) ftr.style.display='block';
 }
 
-function openCart(){ document.getElementById('cartDrawer').classList.add('open');document.getElementById('cartVeil').classList.add('open');document.body.style.overflow='hidden'; }
-function closeCart(){ document.getElementById('cartDrawer').classList.remove('open');document.getElementById('cartVeil').classList.remove('open');document.body.style.overflow=''; }
+/* ── STEP NAVIGATION ── */
+function goStep2(){
+  if(!cart.length) return;
+  // Update mini order summary
+  const units=totalUnits(),w=isWholesale(),total=cartTotal();
+  const pe=w?CFG.P_WHOLESALE:CFG.P_UNIT;
+  document.getElementById('coMiniList').innerHTML=cart.map(item=>`
+    <div class="co-mini-row">
+      ${item.imagen?`<img class="co-mini-img" src="${esc(item.imagen)}" alt="" onerror="fallbackImg(this)"/>`:'<div class="co-mini-img"></div>'}
+      <div class="co-mini-name">${esc(item.nombre)}</div>
+      <div class="co-mini-qty">${item.qty} uds</div>
+      <div class="co-mini-price">$${(item.qty*priceEach(item)).toFixed(2)}</div>
+    </div>`).join('');
+  document.getElementById('coMiniTotal').innerHTML=`<span>TOTAL ${w?'(mayoreo)':''}</span><span>$${total.toFixed(2)}</span>`;
+  // Switch step
+  document.getElementById('cdStep1').classList.add('hidden');
+  document.getElementById('cdStep2').classList.remove('hidden');
+  document.getElementById('pip1').className='step-pip done';
+  document.getElementById('pip1').querySelector('.step-circle').innerHTML='✓';
+  document.getElementById('pip2').className='step-pip on';
+  document.getElementById('stepLine').className='step-line done';
+  document.getElementById('cdTitle').textContent='Datos del Pedido';
+  document.getElementById('cdStep2').querySelector('.cd-checkout').scrollTop=0;
+}
+
+function goStep1(){
+  document.getElementById('cdStep2').classList.add('hidden');
+  document.getElementById('cdStep1').classList.remove('hidden');
+  document.getElementById('pip1').className='step-pip on';
+  document.getElementById('pip1').querySelector('.step-circle').innerHTML='1';
+  document.getElementById('pip2').className='step-pip';
+  document.getElementById('stepLine').className='step-line';
+  document.getElementById('cdTitle').textContent='Tu Carrito';
+}
+
+function openCart(){
+  goStep1();
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartVeil').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartVeil').classList.remove('open');
+  document.body.style.overflow='';
+}
 
 // ══════════════════════════════════
 //  CHECKOUT / SEND ORDER
@@ -1528,7 +1781,7 @@ function sendOrder(){
   ].filter(Boolean).join('\n');
   window.open('https://wa.me/'+CFG.WA+'?text='+encodeURIComponent(lines),'_blank');
   toast('¡Pedido enviado por WhatsApp! ✓');
-  cart=[];updateCartUI();closeCart();
+  cart=[];updateCartUI();goStep1();closeCart();
 }
 
 // ══════════════════════════════════
