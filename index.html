@@ -420,6 +420,9 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 .btn-wa-order:hover{background:var(--R2);transform:translateY(-1px)}
 .btn-wa-order svg{width:15px;height:15px;fill:var(--W)}
 .btn-back{width:100%;padding:10px;background:transparent;border:1px solid var(--B5);color:var(--W3);font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:4px;cursor:pointer;margin-top:7px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.btn-clear-cart{width:100%;padding:9px;background:transparent;border:1px solid rgba(200,39,45,.2);color:#555;font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:4px;cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.btn-clear-cart:hover{border-color:var(--R);color:var(--R2)}
+.btn-clear-cart svg{width:12px;height:12px;fill:currentColor}
 .btn-back:hover{border-color:var(--W3);color:var(--W2)}
 .btn-back svg{width:12px;height:12px;fill:currentColor}
 .cart-note{font-size:.6rem;color:#555;text-align:center;margin-top:7px}
@@ -704,6 +707,183 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
   .cart-drawer{-webkit-overflow-scrolling:touch}
   .cd-body{-webkit-overflow-scrolling:touch}
 }
+
+
+/* ════ ENHANCED MOBILE RESPONSIVE ════ */
+
+/* ── Cart drawer: full-screen stack on mobile ── */
+@media(max-width:600px){
+  /* Drawer fills screen, flex column properly */
+  .cart-drawer{
+    width:100vw;
+    left:0; right:0;
+    display:flex;
+    flex-direction:column;
+    max-height:100dvh;
+    max-height:100vh;
+  }
+
+  /* Header compact */
+  .cd-hdr{padding:11px 14px;gap:8px}
+  .cd-hdr h3{font-size:1.05rem}
+  .step-indicator{gap:0}
+  .step-pip{gap:4px}
+  .step-circle{width:20px;height:20px;font-size:.54rem}
+  .step-label{font-size:.54rem!important}
+  .step-line{width:20px}
+
+  /* Wholesale badge */
+  .cd-whl{margin:7px 12px 0;padding:7px 10px;font-size:.65rem}
+
+  /* Step 1 — products list takes all available space */
+  .cd-step{flex:1;min-height:0;overflow:hidden}
+  .cd-products{
+    flex:1;
+    min-height:0;
+    padding:9px 11px;
+    gap:7px;
+    /* limit max so footer is always visible */
+    max-height:calc(100dvh - 260px);
+    max-height:calc(100vh - 260px);
+  }
+
+  /* Product card compact on mobile */
+  .c-item-top{padding:9px 10px 7px;gap:8px}
+  .ci-img{width:52px;height:52px;border-radius:4px}
+  .ci-name{font-size:.77rem;-webkit-line-clamp:2}
+  .ci-meta{font-size:.58rem}
+  .ci-price{font-size:.68rem}
+  .ci-del svg{width:12px;height:12px}
+  .c-item-bottom{padding:5px 10px 8px}
+  .ciq-btn{width:28px;height:28px;font-size:.78rem}
+  .ciq-val{font-size:.72rem;min-width:24px}
+  .ci-unit-price{font-size:.58rem}
+
+  /* Step 1 footer always visible at bottom */
+  .cd-step1-ftr{padding:10px 12px;flex-shrink:0}
+  .whl-progress{margin-bottom:7px}
+  .whl-progress-label{font-size:.58rem}
+  .whl-progress-bar{height:3px}
+  .cd-totals{margin-bottom:9px}
+  .cd-row{font-size:.7rem;padding:2px 0}
+  .cd-row.total{font-size:.88rem;padding-top:7px;margin-top:4px}
+  .btn-continue{padding:12px;font-size:.72rem;letter-spacing:1.5px}
+  .btn-continue svg{width:13px;height:13px}
+  .btn-clear-cart{padding:8px;font-size:.64rem}
+
+  /* Step 2 checkout scrollable */
+  .cd-checkout{
+    padding:11px 13px;
+    max-height:calc(100dvh - 160px);
+    max-height:calc(100vh - 160px);
+  }
+  .co-order-mini{padding:10px 11px;margin-bottom:11px}
+  .co-order-mini-title{font-size:.55rem;margin-bottom:6px}
+  .co-mini-img{width:28px;height:28px;border-radius:3px}
+  .co-mini-name{font-size:.68rem}
+  .co-mini-qty{font-size:.6rem}
+  .co-mini-price{font-size:.65rem}
+  .co-mini-total span:last-child{font-size:.82rem}
+  .co-sec-label{font-size:.54rem;margin:11px 0 6px}
+  .co-field-row{gap:6px;margin-bottom:6px}
+  .cff{margin-bottom:6px;gap:2px}
+  .cff label{font-size:.53rem}
+  .cff input,.cff select{padding:8px 10px;font-size:.8rem}
+  .pay-methods{gap:4px;margin-bottom:6px}
+  .pay-opt{padding:9px 6px;font-size:.7rem}
+  .loc-btn{padding:8px;font-size:.68rem;margin-bottom:5px}
+  .delivery-note{padding:7px 10px;font-size:.64rem;margin:8px 0}
+  .delivery-note svg{width:11px;height:11px}
+  .cd-step2-ftr{padding:10px 12px}
+  .btn-wa-order{padding:12px;font-size:.7rem;letter-spacing:1px}
+  .btn-wa-order svg{width:14px;height:14px}
+  .btn-back{padding:9px;font-size:.65rem;margin-top:6px}
+  .cart-note{font-size:.58rem;margin-top:5px}
+}
+
+/* ── Modal: bottom sheet on mobile ── */
+@media(max-width:600px){
+  .modal-hdr{padding:13px 15px 10px}
+  .modal-body{padding:14px 14px 18px;gap:14px}
+  .mi-name{font-size:1.2rem}
+  .mi-price-box{padding:10px 11px;gap:10px;flex-wrap:wrap}
+  .mipb-item .a{font-size:1rem}
+  .mi-qty-label{font-size:.55rem;margin-bottom:7px}
+  .qty-presets{gap:4px;margin-bottom:8px}
+  .qp-btn{padding:6px 9px;font-size:.65rem}
+  .qty-custom{gap:6px;margin-bottom:12px}
+  .qty-custom label{font-size:.65rem}
+  .qty-custom input{width:60px;padding:6px 8px;font-size:.74rem}
+  .qty-total{padding:7px 10px;font-size:.72rem}
+  .btn-add-cart{padding:12px;font-size:.7rem}
+  .var-type-section{margin-bottom:10px}
+  .var-type-label{font-size:.54rem!important}
+  .var-val-btn{padding:4px 10px;font-size:.64rem}
+  .var-qty-input{width:55px;padding:5px 6px;font-size:.7rem}
+  .mi-desc{font-size:.78rem;line-height:1.65}
+  .mi-fecha{font-size:.54rem}
+  .mi-sku{font-size:.57rem}
+}
+
+/* ── Product grid on mobile ── */
+@media(max-width:480px){
+  .p-grid{grid-template-columns:repeat(2,1fr);gap:3px}
+  .p-body{padding:9px 9px 11px}
+  .p-cat{font-size:.53rem;letter-spacing:2px}
+  .p-name{font-size:.78rem}
+  .p-sku{font-size:.54rem;margin-bottom:7px}
+  .p-desc-snip{font-size:.6rem;margin-bottom:7px}
+  .p-price .unit{font-size:.8rem}
+  .p-price .bulk{font-size:.55rem}
+  .p-add{width:28px;height:28px}
+  .p-add svg{width:13px;height:13px}
+  .p-vars-badge{font-size:.52rem;padding:1px 5px}
+}
+
+/* ── TSZ section grid on mobile ── */
+@media(max-width:480px){
+  .tsz-prod-grid{grid-template-columns:1fr 1fr;gap:6px}
+  .tsz-prod-name{font-size:.74rem}
+  .tsz-prod-price{font-size:.7rem}
+  .tsz-add-btn{width:24px;height:24px}
+  .tsz-add-btn svg{width:11px;height:11px}
+}
+
+/* ── Section headings on small screens ── */
+@media(max-width:380px){
+  .sec-h{font-size:1.9rem}
+  .hero-h1{font-size:2rem}
+  .hdr-logo img{height:38px}
+}
+
+/* ── Wholesale bar on mobile ── */
+@media(max-width:600px){
+  .wholesale-bar{padding:16px 15px;margin-top:28px;gap:12px;flex-direction:column;text-align:center;align-items:center}
+  .wb-text h3{font-size:1.05rem}
+  .wb-text p{font-size:.68rem}
+  .wb-prices{gap:14px}
+  .wbp-item .a{font-size:1.05rem}
+  .wbp-item .l{font-size:.54rem}
+}
+
+/* ── Touch targets: minimum 44px for interactive elements ── */
+@media(max-width:600px){
+  .flt{min-height:36px;padding:6px 13px}
+  .ct-btn{min-height:44px}
+  .ciq-btn{min-width:32px;min-height:32px}
+  .tsz-pag button{width:34px;height:34px}
+  .pg-btn{width:36px;height:36px}
+  .soc-btn{width:40px;height:40px}
+}
+
+/* ── Footer on very small screens ── */
+@media(max-width:380px){
+  .site-footer{padding:28px 14px 16px}
+  .footer-grid{gap:20px}
+}
+
+/* ── Prevent body scroll when cart/modal open ── */
+body.cart-open,.cart-open{overflow:hidden!important}
 
 </style>
 </head>
@@ -990,10 +1170,11 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
       </div>
       <div class="mi-qty-label">Cantidad a agregar</div>
       <div class="qty-presets">
-        <button class="qp-btn on" onclick="setQtyPreset(100,this)">100</button>
-        <button class="qp-btn" onclick="setQtyPreset(200,this)">200</button>
-        <button class="qp-btn" onclick="setQtyPreset(400,this)">400</button>
-        <button class="qp-btn" onclick="setQtyPreset(0,this)">Personalizar</button>
+        <button class="qp-btn" onclick="setQtyPreset(10,this)">×10</button>
+        <button class="qp-btn" onclick="setQtyPreset(50,this)">×50</button>
+        <button class="qp-btn" onclick="setQtyPreset(100,this)">×100</button>
+        <button class="qp-btn" onclick="setQtyPreset(200,this)">×200</button>
+        <button class="qp-btn" onclick="setQtyPreset(400,this)">×400</button>
       </div>
       <div class="qty-custom" id="qtyCustomRow" style="display:none"><label>Cantidad:</label><input type="number" id="customQtyInput" min="1" value="1" oninput="updateQtyTotal()"/></div>
       <div class="qty-total"><span>Subtotal estimado</span><span id="qtyTotalDisplay">$499.00</span></div>
@@ -1042,6 +1223,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
       <button class="btn-continue" onclick="goStep2()">
         Continuar con mis datos
         <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </button>
+      <button class="btn-clear-cart" onclick="clearCart()">
+        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        Vaciar carrito
       </button>
     </div>
   </div>
@@ -1122,7 +1307,7 @@ const CFG = {
 // ══════════════════════════════════
 let allProducts=[], filtered=[], cart=[];
 let currentCat='Todos', currentPage=1, currentSort='default', searchQ='';
-let modalProduct=null, modalQty=100;
+let modalProduct=null, modalQty=1;
 let userLocation='', selectedPay='';
 let tszProducts=[], tszPage=0;
 
@@ -1494,16 +1679,17 @@ function openModal(gi){
       return `<div class="var-type-section">
         <span class="var-type-label">${esc(type)}</span>
         <div class="var-values-row">${values.map((v,vi)=>`<button class="var-val-btn" data-type="${esc(type)}" data-val="${esc(v)}" data-gi="${gi}" data-vi="${vi}" onclick="toggleVarVal(this)">${esc(v)}</button>`).join('')}</div>
-        <div class="var-qty-row"><label>Cantidad por variación:</label><input type="number" class="var-qty-input" id="varqty_${gi}" min="1" value="100" oninput="updateVarSubtotal()"/></div>
+        <div class="var-qty-row"><label>Cantidad por variación:</label><input type="number" class="var-qty-input" id="varqty_${gi}" min="1" value="1" oninput="updateVarSubtotal()"/></div>
       </div>`;
     }).join('');
     updateVarSubtotal();
   } else varsWrap.style.display='none';
   // Qty presets
+  // Reset qty to 1, show custom input by default
   document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('.qp-btn')[0].classList.add('on');
-  document.getElementById('qtyCustomRow').style.display='none';
+  document.getElementById('qtyCustomRow').style.display='flex';
   document.getElementById('customQtyInput').value=1;
+  modalQty=1;
   updateQtyTotal();
   const isMob=window.innerWidth<=600;
   const modalEl=document.getElementById('productModal');
@@ -1515,12 +1701,13 @@ function openModal(gi){
 }
 
 function closeModal(){ const m=document.getElementById('productModal'); if(window.innerWidth<=600){m.style.transform='translateY(100%)';setTimeout(()=>{m.classList.remove('open');m.style.cssText='';document.getElementById('modalVeil').classList.remove('open');document.body.style.overflow='';},320);}else{document.getElementById('modalVeil').classList.remove('open');m.classList.remove('open');document.body.style.overflow='';} }
-function quickAdd(gi){ const p=allProducts[gi]; if(p) addToCart(p,100); }
+function quickAdd(gi){ openModal(gi); }
 
 function setQtyPreset(qty,btn){
-  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
-  if(qty===0){ document.getElementById('qtyCustomRow').style.display='flex'; modalQty=parseInt(document.getElementById('customQtyInput').value)||1; }
-  else{ document.getElementById('qtyCustomRow').style.display='none'; modalQty=qty; }
+  document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  modalQty=qty;
+  document.getElementById('customQtyInput').value=qty;
   updateQtyTotal();
 }
 
@@ -1551,8 +1738,7 @@ function updateVarSubtotal(){
   const varsWrap=document.getElementById('mi-vars');
   if(!varsWrap||varsWrap.style.display==='none'){
     // No variations — use normal qty
-    const active=document.querySelector('.qp-btn.on');
-    if(active&&active.textContent==='Personalizar') modalQty=Math.max(1,parseInt(document.getElementById('customQtyInput').value)||1);
+    modalQty=Math.max(1,parseInt(document.getElementById('customQtyInput').value)||1);
     const w=modalQty>=CFG.WHL_MIN;
     const p=modalProduct;
     const price=w?(p?p.precioMayor:CFG.P_WHOLESALE):(p?p.precio:CFG.P_UNIT);
@@ -1716,6 +1902,13 @@ function goStep1(){
   document.getElementById('pip2').className='step-pip';
   document.getElementById('stepLine').className='step-line';
   document.getElementById('cdTitle').textContent='Tu Carrito';
+}
+
+function clearCart(){
+  if(!cart.length) return;
+  if(!confirm('¿Vaciar el carrito? Se eliminarán todos los productos.')) return;
+  cart=[];updateCartUI();
+  toast('Carrito vaciado');
 }
 
 function openCart(){
