@@ -272,6 +272,16 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 .mi-vars{margin-bottom:16px}
 .mi-vars-label{font-size:.57rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:6px}
 .mi-vars-list{display:flex;flex-wrap:wrap;gap:5px}
+.var-type-section{margin-bottom:14px}
+.var-type-label{font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--R2);font-weight:700;margin-bottom:8px;display:block}
+.var-values-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.var-val-btn{font-size:.68rem;background:var(--B4);border:1.5px solid var(--B5);color:var(--W3);padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.var-val-btn:hover{border-color:var(--R);color:var(--W2)}
+.var-val-btn.sel{background:rgba(200,39,45,.16);border-color:var(--R);color:var(--W)}
+.var-qty-row{display:flex;align-items:center;gap:8px;margin-top:4px}
+.var-qty-row label{font-size:.65rem;color:var(--W3);white-space:nowrap}
+.var-qty-input{width:64px;background:var(--B3);border:1px solid var(--B4);border-bottom:2px solid var(--B4);padding:6px 8px;color:var(--W2);font-family:'Space Mono',monospace;font-size:.76rem;border-radius:3px;outline:none;text-align:center;transition:border-color .2s}
+.var-qty-input:focus{border-bottom-color:var(--R)}
 .var-chip{font-size:.64rem;background:var(--B4);border:1px solid var(--B5);color:var(--W3);padding:3px 9px;border-radius:20px}
 .mi-fecha{font-size:.58rem;color:#444;font-family:'Space Mono',monospace;margin-bottom:14px}
 .mi-price-box{background:var(--B3);border:1px solid rgba(200,39,45,.16);border-radius:5px;padding:12px 14px;margin-bottom:16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
@@ -434,6 +444,160 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid var(--B4);padding-top:18px}
 .footer-copy{font-size:.64rem;color:#333;letter-spacing:.5px}
 .footer-copy span{color:var(--R2)}
+
+/* ════ MOBILE RESPONSIVE IMPROVEMENTS ════ */
+
+/* Cart drawer — full screen on mobile, scrollable */
+@media(max-width:600px){
+  .cart-drawer{width:100vw;left:0;right:0}
+  .cd-hdr{padding:14px 16px}
+  .cd-hdr h3{font-size:1.15rem}
+  .cd-body{padding:10px 12px;gap:7px}
+  .c-item{padding:9px 10px;gap:8px}
+  .ci-img{width:48px;height:48px}
+  .ci-name{font-size:.74rem}
+  .ci-meta{font-size:.6rem}
+  .ci-price{font-size:.7rem}
+  .ciq-btn{padding:3px 7px;font-size:.66rem}
+  .ci-del{top:7px;right:7px}
+
+  /* Cart form — compact on mobile */
+  .cart-form{padding:10px 12px;max-height:none}
+  .cff-title{font-size:.55rem;margin-bottom:8px}
+  .cff-row{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+  .cff{margin-bottom:6px;gap:3px}
+  .cff label{font-size:.54rem}
+  .cff input,.cff select{padding:7px 9px;font-size:.78rem}
+  .pay-methods{grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
+  .pay-opt{padding:7px 8px;font-size:.7rem}
+  .loc-btn{padding:8px;font-size:.7rem;margin-bottom:5px}
+  .delivery-note{padding:7px 10px;font-size:.64rem;margin-bottom:8px}
+  .cart-ftr{padding:10px 12px}
+  .cd-row{font-size:.7rem}
+  .cd-row.total{font-size:.84rem;padding-top:8px}
+  .btn-wa-order{padding:12px;font-size:.72rem;letter-spacing:1.5px;margin-top:9px}
+  .btn-wa-order svg{width:14px;height:14px}
+  .cart-note{font-size:.58rem;margin-top:6px}
+  .cd-whl{margin:8px 12px 0;padding:8px 10px;font-size:.67rem}
+}
+
+/* Hero on mobile */
+@media(max-width:600px){
+  .hero{height:100svh;min-height:560px}
+  .hero-content{padding:0 16px 86px}
+  .hero-h1{font-size:clamp(2.2rem,9vw,3.6rem)}
+  .hero-tagline{font-size:.84rem;margin:14px 0 28px}
+  .hero-chips{gap:7px;margin-bottom:28px}
+  .hero-chip{padding:7px 12px;font-size:.72rem}
+  .hero-chip strong{font-size:.86rem}
+  .hero-actions{flex-direction:column;gap:10px;max-width:240px}
+  .btn-prim,.btn-ghost{padding:12px 20px;font-size:.73rem;justify-content:center;width:100%}
+  .slider-dots{bottom:80px}
+}
+
+/* Category tabs */
+@media(max-width:600px){
+  .cat-tabs-inner{padding:0 12px}
+  .ct-btn{padding:12px 14px;font-size:.62rem;letter-spacing:1.5px}
+}
+
+/* TSZ section */
+@media(max-width:600px){
+  .tsz-section{padding:52px 16px}
+  .tsz-desc{font-size:.84rem;margin-bottom:22px}
+  .tsz-feats{grid-template-columns:1fr 1fr;gap:2px}
+  .tsz-feat{padding:14px 12px}
+  .tsz-feat h4{font-size:.72rem}
+  .tsz-feat p{font-size:.66rem}
+  .tsz-prod-grid{grid-template-columns:1fr 1fr;gap:6px}
+  .tsz-prod-name{font-size:.76rem}
+  .tsz-prod-price{font-size:.72rem}
+  .wholesale-bar{padding:18px 16px;flex-direction:column;gap:14px;text-align:center}
+  .wb-text h3{font-size:1.1rem}
+  .wb-text p{font-size:.7rem}
+  .wb-prices{justify-content:center}
+  .wbp-item .a{font-size:1.1rem}
+}
+
+/* Products section */
+@media(max-width:600px){
+  .prod-section{padding:48px 14px 52px}
+  .prod-search{padding:9px 13px}
+  .prod-search input{font-size:.82rem}
+  .filter-row{gap:5px;margin-bottom:16px}
+  .flt{padding:6px 13px;font-size:.62rem}
+  .prod-header{margin-bottom:10px}
+  .prod-ttl{font-size:1.3rem}
+  .sort-sel{font-size:.66rem;padding:6px 8px}
+  .p-grid{gap:2px}
+  .p-body{padding:10px 9px 11px}
+  .p-name{font-size:.8rem}
+  .p-price .unit{font-size:.8rem}
+  .p-price .bulk{font-size:.56rem}
+  .p-add{width:27px;height:27px}
+  .p-add svg{width:13px;height:13px}
+  .pagination{padding:20px 0 4px;gap:4px}
+  .pg-btn{width:32px;height:32px;font-size:.66rem}
+  .pg-info{font-size:.58rem}
+}
+
+/* Product modal on mobile */
+@media(max-width:600px){
+  .modal{width:100vw;max-width:100vw;left:0;right:0;top:auto;bottom:0;transform:translateY(10px) scale(1);border-radius:16px 16px 0 0;max-height:92vh;margin:0}
+  .modal.open{transform:translateY(0) scale(1)}
+  .modal-veil.open ~ .modal{transform:none}
+  .modal-hdr{padding:14px 16px 12px}
+  .modal-body{padding:16px;gap:16px}
+  .modal-img{max-height:220px}
+  .mi-name{font-size:1.3rem}
+  .mi-price-box{padding:10px 12px;gap:12px}
+  .mipb-item .a{font-size:1.05rem}
+  .qty-presets{gap:4px}
+  .qp-btn{padding:6px 10px;font-size:.67rem}
+  .btn-add-cart{padding:12px;font-size:.72rem}
+  .var-type-section{margin-bottom:12px}
+  .var-val-btn{padding:4px 10px;font-size:.65rem}
+  .var-qty-input{width:58px;font-size:.72rem;padding:5px 7px}
+}
+
+/* About section */
+@media(max-width:600px){
+  .about-section{padding:52px 16px}
+  .about-imgs{grid-template-rows:160px 160px;gap:7px}
+  .about-text>p{font-size:.84rem}
+  .about-nums{gap:2px}
+  .a-num{padding:14px 12px}
+  .a-num .n{font-size:1.1rem}
+}
+
+/* Contact section */
+@media(max-width:600px){
+  .contact-section{padding:52px 16px 56px}
+  .c-info-row{gap:10px}
+  .c-ico{width:34px;height:34px}
+  .c-ico svg{width:14px;height:14px}
+  .c-val{font-size:.78rem}
+  .cf-title{font-size:1.15rem;margin-bottom:14px}
+  .ff input,.ff textarea,.ff select{padding:10px 11px;font-size:.8rem}
+}
+
+/* Footer */
+@media(max-width:480px){
+  .site-footer{padding:36px 16px 18px}
+  .footer-brand p{font-size:.7rem}
+}
+
+/* Section heading */
+@media(max-width:600px){
+  .sec-h{font-size:clamp(2rem,9vw,3rem)}
+}
+
+/* Smooth overflow scroll for cart on mobile */
+@media(max-width:600px){
+  .cart-drawer{-webkit-overflow-scrolling:touch}
+  .cd-body{-webkit-overflow-scrolling:touch}
+}
+
 </style>
 </head>
 <body>
@@ -488,7 +652,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
     </div>
     <!-- Slide 4: Beauty products -->
     <div class="slide" id="slide3">
-      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=1800&auto=format&fit=crop&q=85" alt="Salud y Belleza"/>
+      <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1800&auto=format&fit=crop&q=85" alt="Cosméticos y Maquillaje"/>
       <div class="slide-overlay"></div>
     </div>
   </div>
@@ -711,7 +875,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
       <div class="mi-sku" id="mi-sku"></div>
       <div class="mi-fecha" id="mi-fecha"></div>
       <div class="mi-desc" id="mi-desc"></div>
-      <div class="mi-vars" id="mi-vars" style="display:none"><div class="mi-vars-label">Variaciones disponibles</div><div class="mi-vars-list" id="mi-vars-list"></div></div>
+      <div class="mi-vars" id="mi-vars" style="display:none"><div class="mi-vars-label">Selecciona Variaciones y Cantidades</div><div id="mi-vars-list"></div></div>
       <div class="mi-price-box">
         <div class="mipb-item"><div class="a" id="mi-price-unit">$4.99</div><div class="l">Por unidad</div></div>
         <div class="mipb-div"></div>
@@ -1148,13 +1312,20 @@ function openModal(gi){
   const varsWrap=document.getElementById('mi-vars'),varsList=document.getElementById('mi-vars-list');
   if(p.variaciones&&p.variaciones.trim()){
     varsWrap.style.display='block';
-    // Parse "Color: Rojo, Azul | Talla: S, M, L" format
-    varsList.innerHTML=p.variaciones.split('|').map(g=>{
+    // Parse "Color: Rojo, Azul, Negro | Talla: S, M, L" — render selectable buttons + qty input per value
+    varsList.innerHTML=p.variaciones.split('|').map((g,gi)=>{
       const pts=(g||'').split(':');
-      if(pts.length<2) return `<span class="var-chip">${esc(g.trim())}</span>`;
+      if(pts.length<2) return '';
       const type=pts[0].trim();
-      return pts[1].split(',').map(v=>`<span class="var-chip">${esc(type)}: ${esc(v.trim())}</span>`).join('');
+      const values=pts[1].split(',').map(v=>v.trim()).filter(Boolean);
+      const btnId=`vtype_${gi}`;
+      return `<div class="var-type-section">
+        <span class="var-type-label">${esc(type)}</span>
+        <div class="var-values-row">${values.map((v,vi)=>`<button class="var-val-btn" data-type="${esc(type)}" data-val="${esc(v)}" data-gi="${gi}" data-vi="${vi}" onclick="toggleVarVal(this)">${esc(v)}</button>`).join('')}</div>
+        <div class="var-qty-row"><label>Cantidad por variación:</label><input type="number" class="var-qty-input" id="varqty_${gi}" min="1" value="100" oninput="updateVarSubtotal()"/></div>
+      </div>`;
     }).join('');
+    updateVarSubtotal();
   } else varsWrap.style.display='none';
   // Qty presets
   document.querySelectorAll('.qp-btn').forEach(b=>b.classList.remove('on'));
@@ -1162,12 +1333,16 @@ function openModal(gi){
   document.getElementById('qtyCustomRow').style.display='none';
   document.getElementById('customQtyInput').value=1;
   updateQtyTotal();
+  const isMob=window.innerWidth<=600;
+  const modalEl=document.getElementById('productModal');
+  modalEl.style.cssText=isMob?'top:auto;bottom:0;left:0;right:0;width:100vw;max-width:100vw;border-radius:16px 16px 0 0;transform:translateY(100%)':'';
   document.getElementById('modalVeil').classList.add('open');
-  document.getElementById('productModal').classList.add('open');
+  modalEl.classList.add('open');
+  if(isMob) setTimeout(()=>modalEl.style.transform='translateY(0)',10);
   document.body.style.overflow='hidden';
 }
 
-function closeModal(){ document.getElementById('modalVeil').classList.remove('open'); document.getElementById('productModal').classList.remove('open'); document.body.style.overflow=''; }
+function closeModal(){ const m=document.getElementById('productModal'); if(window.innerWidth<=600){m.style.transform='translateY(100%)';setTimeout(()=>{m.classList.remove('open');m.style.cssText='';document.getElementById('modalVeil').classList.remove('open');document.body.style.overflow='';},320);}else{document.getElementById('modalVeil').classList.remove('open');m.classList.remove('open');document.body.style.overflow='';} }
 function quickAdd(gi){ const p=allProducts[gi]; if(p) addToCart(p,100); }
 
 function setQtyPreset(qty,btn){
@@ -1180,14 +1355,71 @@ function setQtyPreset(qty,btn){
 function updateQtyTotal(){
   const act=document.querySelector('.qp-btn.on');
   if(act&&act.textContent==='Personalizar') modalQty=Math.max(1,parseInt(document.getElementById('customQtyInput').value)||1);
-  const w=modalQty>=CFG.WHL_MIN;
-  const p=modalProduct;
-  const price=w?(p?p.precioMayor:CFG.P_WHOLESALE):(p?p.precio:CFG.P_UNIT);
-  document.getElementById('qtyTotalDisplay').textContent='$'+(modalQty*price).toFixed(2);
-  document.getElementById('wholesaleNoteM').className='wholesale-note-m'+(w?' show':'');
+  updateVarSubtotal();
 }
 
-function addCurrentToCart(){ if(modalProduct){ addToCart(modalProduct,modalQty); closeModal(); } }
+function toggleVarVal(btn){
+  btn.classList.toggle('sel');
+  updateVarSubtotal();
+}
+
+function getSelectedVars(){
+  // Returns [{type, val, qty}] for each selected variation value
+  const selected=[];
+  document.querySelectorAll('.var-val-btn.sel').forEach(btn=>{
+    const gi=btn.dataset.gi;
+    const qtyEl=document.getElementById('varqty_'+gi);
+    const qty=qtyEl?Math.max(1,parseInt(qtyEl.value)||1):100;
+    selected.push({type:btn.dataset.type, val:btn.dataset.val, qty:qty});
+  });
+  return selected;
+}
+
+function updateVarSubtotal(){
+  const varsWrap=document.getElementById('mi-vars');
+  if(!varsWrap||varsWrap.style.display==='none'){
+    // No variations — use normal qty
+    const active=document.querySelector('.qp-btn.on');
+    if(active&&active.textContent==='Personalizar') modalQty=Math.max(1,parseInt(document.getElementById('customQtyInput').value)||1);
+    const w=modalQty>=CFG.WHL_MIN;
+    const p=modalProduct;
+    const price=w?(p?p.precioMayor:CFG.P_WHOLESALE):(p?p.precio:CFG.P_UNIT);
+    document.getElementById('qtyTotalDisplay').textContent='$'+(modalQty*price).toFixed(2);
+    document.getElementById('wholesaleNoteM').className='wholesale-note-m'+(w?' show':'');
+    return;
+  }
+  const selectedVars=getSelectedVars();
+  if(selectedVars.length>0){
+    const totalVarQty=selectedVars.reduce((s,v)=>s+v.qty,0);
+    const p=modalProduct;
+    const w=totalVarQty>=CFG.WHL_MIN;
+    const price=w?(p?p.precioMayor:CFG.P_WHOLESALE):(p?p.precio:CFG.P_UNIT);
+    document.getElementById('qtyTotalDisplay').textContent='$'+(totalVarQty*price).toFixed(2)+' ('+totalVarQty+' uds total)';
+    document.getElementById('wholesaleNoteM').className='wholesale-note-m'+(w?' show':'');
+  } else {
+    // fallback to preset qty
+    const w=modalQty>=CFG.WHL_MIN;
+    const p=modalProduct;
+    const price=w?(p?p.precioMayor:CFG.P_WHOLESALE):(p?p.precio:CFG.P_UNIT);
+    document.getElementById('qtyTotalDisplay').textContent='$'+(modalQty*price).toFixed(2);
+    document.getElementById('wholesaleNoteM').className='wholesale-note-m'+(w?' show':'');
+  }
+}
+
+function addCurrentToCart(){
+  if(!modalProduct) return;
+  const selectedVars=getSelectedVars();
+  if(selectedVars.length>0){
+    // Add one cart entry per selected variation value
+    selectedVars.forEach(sv=>{
+      const prodCopy={...modalProduct, _varLabel:sv.type+': '+sv.val, nombre:modalProduct.nombre+' ('+sv.type+': '+sv.val+')'};
+      addToCart(prodCopy, sv.qty);
+    });
+  } else {
+    addToCart(modalProduct, modalQty);
+  }
+  closeModal();
+}
 
 // ══════════════════════════════════
 //  CART
